@@ -1,3 +1,2 @@
-# BlackJack-Ducky
-
-
+# BlackDuck
+Making blackjack
