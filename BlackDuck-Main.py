@@ -80,13 +80,48 @@ CardDeck = (
 
 CurrentCardDeck = CardDeck
 
-print("Welcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
-
 def Menu():
     try:
         while True:
-            UserMenuPick = input("What would you like to do?\n1) Play\n2) Information \n3) Settings \n4) Quit")
-            if UserMenuPick == "1" or "Play":
+            UserMenuPick = input(
+                "What would you like to do?\n1) Play\n2) Information \n"
+                "3) Settings \n4) Quit\n"
+            ).strip().lower()
+            if UserMenuPick == "1" or UserMenuPick == "Play":
                 print("playing")
-    except:
-        pass
+
+            elif UserMenuPick == "2" or UserMenuPick == "Information":
+                    UIP = (
+                        "Information about this game!\n1) How to play (Normal)\n2) How to play (Advanced)\n"
+                        "3) Terminology\n4) Card Values\n5) Tips and Tricks\n 6) Back\n"
+                        ).strip().lower()
+                    if UIP == "1" or UIP == "How to play (Normal)":
+                        print("") ###### NOT DONE
+                    elif UIP == "2" or UIP == "How to play (Advanced)":
+                        print("") ###### NOT DONE
+                    elif UIP == "3" or UIP == "Terminology":
+                        print("") ###### NOT DONE
+                    elif UIP == "4" or UIP == "Card Values":
+                        print("") ###### NOT DONE
+                    elif UIP == "5" or UIP == "Tips and Tricks":
+                        print("") ###### NOT DONE
+                    elif UIP == "6" or UIP == "Back":
+                        break
+                    else:
+                        print("\nOption not avaliable\n")
+
+
+    except KeyboardInterrupt:
+        print("Quitting")
+        exit()
+
+    except EOFError:
+        print("Quitting")
+        exit()
+
+print("\nWelcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
+
+Menu()
+
+
+# How to play (Normal):\nThe aim of the game is to get higher than the dealer without going over 21.\nYou are first given 2 cards where you have 2 options (see in terminology), be given another card or don't get anymore.\nIf the value of the cards that you have are over 21, then your lose.\n")
