@@ -3,6 +3,18 @@ import random
 UserWallet = 1000
 UserHand = 0
 
+CP1 = 1
+CP2 = 1
+CP3 = 1
+CP4 = 1
+CP5 = 1
+CP6 = 1 
+CP7 = 1 
+CP8 = 1 
+CP9 = 1
+CP10 = 1
+CP11 = 1
+
 H2 = 2
 H3 = 3
 H4 = 4
@@ -70,4 +82,11 @@ CurrentCardDeck = CardDeck
 
 print("Welcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
 
-
+def Menu():
+    try:
+        while True:
+            UserMenuPick = input("What would you like to do?\n1) Play\n2) Information \n3) Settings \n4) Quit")
+            if UserMenuPick == "1" or "Play":
+                print("playing")
+    except:
+        pass
