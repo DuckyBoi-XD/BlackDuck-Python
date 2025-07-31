@@ -96,18 +96,25 @@ def Menu():
                         "3) Terminology\n4) Card Values\n5) Tips and Tricks\n6) Back\n\n"
                         ).strip().lower()
                     if UIP == "1" or UIP == "How to play (Normal)":
-                        print("\nThe aim of the game is to get higher than the dealer without going over 21." \
-                        "\nYou are first given 2 cards where you have 2 options (see in terminology), hit: be given another card or stand: don't get anymore cards."
-                        "\nIf the value of the cards that you have are over 21, then your lose."
-                        "\nOnce you 'hit', your total card value will get closer and closer to 21."
-                        "\nIf you your total card value goes over 21, then you lose (bust)"
-                        "\nIf you don't want to recive any more cards you stand"
-                        "\nAfter standing, dealer gets to recive cards to match or achieve a higher total card value."
-                        "\nIf your total card value matchs the dealer's total card value, then no one wins and your bet is returned to you (push)"
-                        "\nIf your total card value is lower than the dealer's total card value, then you win, reciving double your bet amount"
-                        "\nYou win if the dealer bust (like how the payer would)"
-
-                    )
+                        while True:
+                            UPGN = input("\nThe aim of the game is to get higher than the dealer without going over 21." \
+                            "\nYou are first given 2 cards where you have 2 options (see in terminology), hit: be given another card or stand: don't get anymore cards."
+                            "\nIf the value of the cards that you have are over 21, then your lose."
+                            "\nOnce you 'hit', your total card value will get closer and closer to 21."
+                            "\nIf you your total card value goes over 21, then you lose (bust)"
+                            "\nIf you don't want to recive any more cards you stand"
+                            "\nAfter standing, dealer gets to recive cards to match or achieve a higher total card value."
+                            "\n\nIf your total card value matchs the dealer's total card value, then no one wins and your bet is returned to you (push)"
+                            "\nIf your total card value is lower than the dealer's total card value, then you win, reciving double your bet amount"
+                            "\nYou win if the dealer bust (like how the payer would)"
+                            "\n\n1) Back"
+                            "\n2) Menu"
+                        ).strip().lower()
+                            if UPGN == ("1", "back"):
+                                break
+                            elif UPGN == ("2", "menu"):
+                                UPExit = True
+                                break
                     elif UIP == "2" or UIP == "How to play (Advanced)":
                         print("") ###### NOT DONE
                     elif UIP == "3" or UIP == "Terminology":
