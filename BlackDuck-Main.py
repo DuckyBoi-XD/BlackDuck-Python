@@ -1,38 +1,21 @@
 import random
 
 USER_WALLET = 1000 #Users money
-UserHand = 0 #Variable to allow Aces work
+USER_HAND = 0 #Variable to allow Aces work
+CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
 
-for i in range(1, 11): #Collects each number in the range
-    exec("H{i} = {i}") #Create/assigns each variable with the value 
-HD = HQ = HK = 10 #Assigns variables with value
-HA = 11 if UserHand >=10 else 1 #assigns if statement to ace and assigns the main value
+CVL = {} #CVL == Card value list. Create dictionary
 
-for i in range(1, 11): #Repeat
-    exec("S{i} = {i}")
-SD = SQ = SK = 10
-SA = 11 if UserHand >=10 else 1
+for suit in CARD_SUITS: #loops through every card suit
+    for value in range(2, 11): #For every card suit this assigns it a number from 2-10
+        CVL[f"{suit}{value}"] = value #Assigns the value to each card (the last number of varible is value)
 
-for i in range(1, 11): #Repeat
-    exec(f"D{i} = {i}")
-DD = DQ = DK = 10
-DA = 11 if UserHand >=10 else 1
+CVL[f"{suit}D"] = CVL[f"{suit}Q"] = CVL[f"{suit}K"] = 10 #Creates Duck(Jack), King and Queen, assigns them the value of 10
+    
+CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1 #Creates the logic and variable for Ace
 
-for i in range(1, 11): #Repeat
-    exec(f"C{i} = {i}")
-CD = CQ = CK = 10
-CA = 11 if UserHand >=10 else 1
 
-CardDeck = (
-    H2, H3, H4, H5, H6, H7, H8, H9, H10, HD, HQ, HK, HA,
-    S2, S3, S4, S5, S6, S7, S8, S9, S10, SD, SQ, SK, SA,
-    D2, D3, D4, D5, D6, D7, D8, D9, D10, DD, DQ, DK, DA,
-    C2, C3, C4, C5, C6, C7, C8, C9, C10, CD, CQ, CK, CA
-)
-
-print(H1)
-'''
-CurrentCardDeck = CardDeck
+# |print(CVL["D2"]+CVL["S4"])| reminder on how to use dictionary
 
 def Menu():
     try:
@@ -131,6 +114,3 @@ def Menu():
 print("\nWelcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
 
 Menu()
-
-
-'''
