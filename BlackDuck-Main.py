@@ -23,6 +23,7 @@ TERMINOLOGY = (
     "first hand)"
     "\nSurender: Give up your the hand and recive half of your bet back"
 )
+
 #----Variables----
 
 CVL = {} #CVL == Card value list. Create dictionary
@@ -36,15 +37,19 @@ CVL[f"{suit}D"] = CVL[f"{suit}Q"] = CVL[f"{suit}K"] = 10
 #Creates Duck(Jack), King and Queen, assigns them the value of 10
 CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1 #Creates the logic and variable for Ace
 
-CVL2 = CVL
+CVL2 = CVL.copy()
+print(CVL2)
+print(CVL)
+print(CVL["A"])
 # | print(CVL["D2"]+CVL["S4"]) | reminder on how to use dictionary
 
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
-'''
-CP1 = random.choices(list(CVL))
-CVL2.popitem(CP1)
+
+CP1 = random.choice(list(CVL2.keys()))
+print(CP1)
+CVL2.pop(CP1)
 print(CVL2)
-'''
+
 def menu():
     '''menu interface/code'''
     try:
@@ -59,7 +64,8 @@ def menu():
                 UPExit = False #turns of multi loop breaker
                 while True: #creates loop for infromation menu
                     UIP = input(
-                        "\nInformation about this game!\n1) How to play (Normal)\n2) How to play (Advanced)\n"
+                        "\nInformation about this game!\n1) How to play (Normal)\n2) How to play "
+                        "(Advanced)\n"
                         "3) Terminology\n4) Card Values\n5) Tips and Tricks\n6) Back\n\n"
                         ).strip().lower()
                     if UIP in ("1", "how to play (normal)", "htpn"): #checks for How to play normal
@@ -71,7 +77,8 @@ def menu():
                                 "\nYou and the dealer gets 2 cards each (one of the dealer's " \
                                 "cards will be unknown to the player. " \
                                 "\nYou have 2 options (see in terminology), hit: be given " \
-                                "another card or stand: don't get anymore cards (note after standing you won't be able to hit)."
+                                "another card or stand: don't get anymore cards (note after " \
+                                "standing you won't be able to hit)."
                                 "\nIf the total value of your cards that you have are over 21, " \
                                 "then your lose."
                                 "\nOnce you 'hit', your total card value will get closer and " \
@@ -110,9 +117,10 @@ def menu():
                                     "\nWhen you doubling down you double your bet amount."
                                     "\nThese 2 actions can only be used when you are dealt " \
                                     "the first 2 cards. You cannot hit then double down."
-                                    "\nYou can however split then double down one or both of your hands."
-                                    "\nThrough the game you can surender which will give you back " \
-                                    "half of your bet but give up your hand"
+                                    "\nYou can however split then double down one or both of " \
+                                    "your hands."
+                                    "\nThrough the game you can surender which will give you " \
+                                    "back half of your bet but give up your hand"
                                     "\n\n1) Back"
                                     "\n2) Menu\n\n"
                             ).strip().lower()
