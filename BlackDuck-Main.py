@@ -1,73 +1,26 @@
 import random
 
-UserWallet = 1000
-UserHand = 0
-CP1 = 1
-CP2 = 1
-CP3 = 1
-CP4 = 1
-CP5 = 1
-CP6 = 1 
-CP7 = 1 
-CP8 = 1 
-CP9 = 1
-CP10 = 1
-CP11 = 1
+USER_WALLET = 1000 #Users money
+UserHand = 0 #Variable to allow Aces work
 
-H2 = 2
-H3 = 3
-H4 = 4
-H5 = 5
-H6 = 6
-H7 = 7
-H8 = 8
-H9 = 9
-H10 = 10
-HD = 10
-HQ = 10
-HK = 10
-HA = 11 if UserHand >=10 else 1
+for i in range(1, 11): #Collects each number in the range
+    exec("H{i} = {i}") #Create/assigns each variable with the value 
+HD = HQ = HK = 10 #Assigns variables with value
+HA = 11 if UserHand >=10 else 1 #assigns if statement to ace and assigns the main value
 
-S2 = 2
-S3 = 3
-S4 = 4
-S5 = 5
-S6 = 6
-S7 = 7
-S8 = 8
-S9 = 9
-S10 = 10
-SD = 10
-SQ = 10
-SK = 10
+for i in range(1, 11): #Repeat
+    exec("S{i} = {i}")
+SD = SQ = SK = 10
 SA = 11 if UserHand >=10 else 1
 
-D2 = 2
-D3 = 3
-D4 = 4
-D5 = 5
-D6 = 6
-D7 = 7
-D8 = 8
-D9 = 9
-D10 = 10 
-DD = 10
-DQ = 10
-DK = 10
+for i in range(1, 11): #Repeat
+    exec(f"D{i} = {i}")
+DD = DQ = DK = 10
 DA = 11 if UserHand >=10 else 1
 
-C2 = 2
-C3 = 3
-C4 = 4
-C5 = 5
-C6 = 6
-C7 = 7
-C8 = 8
-C9 = 9
-C10 = 10
-CD = 10
-CQ = 10
-CK = 10
+for i in range(1, 11): #Repeat
+    exec(f"C{i} = {i}")
+CD = CQ = CK = 10
 CA = 11 if UserHand >=10 else 1
 
 CardDeck = (
@@ -77,6 +30,8 @@ CardDeck = (
     C2, C3, C4, C5, C6, C7, C8, C9, C10, CD, CQ, CK, CA
 )
 
+print(H1)
+'''
 CurrentCardDeck = CardDeck
 
 def Menu():
@@ -95,31 +50,40 @@ def Menu():
                         "\nInformation about this game!\n1) How to play (Normal)\n2) How to play (Advanced)\n"
                         "3) Terminology\n4) Card Values\n5) Tips and Tricks\n6) Back\n\n"
                         ).strip().lower()
-                    if UIP == "1" or UIP == "How to play (Normal)":
+                    if UIP in ("1", "how to play (normal)", "htpn"):
                         while True:
-                            UPGN = input("\nThe aim of the game is to get higher than the dealer without going over 21." \
-                            "\nYou are first given 2 cards where you have 2 options (see in terminology), hit: be given another card or stand: don't get anymore cards."
-                            "\nIf the value of the cards that you have are over 21, then your lose."
-                            "\nOnce you 'hit', your total card value will get closer and closer to 21."
-                            "\nIf you your total card value goes over 21, then you lose (bust)"
-                            "\nIf you don't want to recive any more cards you stand"
-                            "\nAfter standing, dealer gets to recive cards to match or achieve a higher total card value."
-                            "\n\nIf your total card value matchs the dealer's total card value, then no one wins and your bet is returned to you (push)"
-                            "\nIf your total card value is lower than the dealer's total card value, then you win, reciving double your bet amount"
-                            "\nYou win if the dealer bust (like how the payer would)"
-                            "\n\n1) Back"
-                            "\n2) Menu"
-                        ).strip().lower()
-                            if UPGN == ("1", "back"):
+                            UPGN = input(
+                                "\nHow to play (NORMAL)"
+                                "\nThe aim of the game is to get higher than the dealer without going over 21." \
+                                "\nYou are first given 2 cards where you have 2 options (see in terminology), hit: be given another card or stand: don't get anymore cards."
+                                "\nIf the value of the cards that you have are over 21, then your lose."
+                                "\nOnce you 'hit', your total card value will get closer and closer to 21."
+                                "\nIf you your total card value goes over 21, then you lose (bust)"
+                                "\nIf you don't want to recive any more cards you stand"
+                                "\nAfter standing, dealer gets to recive cards to match or achieve a higher total card value."
+                                "\n\nIf your total card value matchs the dealer's total card value, then no one wins and your bet is returned to you (push)"
+                                "\nIf your total card value is lower than the dealer's total card value, then you win, reciving double your bet amount"
+                                "\nYou win if the dealer bust (like how the payer would)"
+                                "\n\n1) Back"
+                                "\n2) Menu\n"
+                            ).strip().lower()
+                            if UPGN in ("1", "back"):
                                 break
-                            elif UPGN == ("2", "menu"):
+                            elif UPGN in ("2", "menu"):
                                 UPExit = True
                                 break
+                            else:
+                                print("\nOption unavaliable, please try again!")
+                        if UPExit:
+                            break
                     elif UIP == "2" or UIP == "How to play (Advanced)":
-                        print("") ###### NOT DONE
+                        UPGA = input(
+                            "\n"
+                        )
                     elif UIP == "3" or UIP == "Terminology":
                         while True:
                             UPT = input(
+                                "\nTERMINOLOGY:\n"
                                 "\nHand: The cards that the payer bets with"
                                 "\nHit: To be given another card\nStand: To revice no more cards"
                                 "\nBust: The value of all your cards is higher than 21 therefore you lose"
@@ -169,3 +133,4 @@ print("\nWelcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start w
 Menu()
 
 
+'''
