@@ -1,9 +1,15 @@
 import random
+import getch
 
 #----Variables----
 USER_WALLET = 1000 #Users money
+USER_BANK = random.randrange(1000, 20000)
 USER_HAND = 0 #Variable to allow Aces work
+USER_NAME = None
 CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
+ATM_NUMBER = str(int(random.random() * 1000000000000000 + 4000000000000000))
+ID_ATM_NUBMER = ATM_NUMBER * 3
+#create atm nember to 16 digits, 4 at start for VISA
 TERMINOLOGY = (
     "\nTERMINOLOGY:\n"
     "\nHand: The cards that the payer bets with"
@@ -56,13 +62,40 @@ CVL_Temp.pop(CP1)
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
 #----Card Deck/Value---
 
+def NamePick(): #creates function where it lets usert oassign a name
+    try:
+        while True:
+            global USER_NAME
+            USER_NAME = input(
+                "\nPlease insert name: "
+            )
+            userNameComfirm = input(
+                f"\nYou have inserted: \"{USER_NAME}\""
+                "\n\n1) CONFIRM"
+                "\n2) REDO\n\n"
+            ).strip().lower()
+            if userNameComfirm in ("1", "confirm"):
+                break
+            elif userNameComfirm in ("2", "redo"):
+                continue
+            else:
+                print("\nOption unavaliable, please try again!")
+                continue
+    except KeyboardInterrupt:
+        print("\nQuitting Program\n")
+        exit()
+
+    except EOFError:
+        print("\nQuitting Program\n")
+        exit()
+
 def menu():
     '''menu interface/code'''
     try:
         while True: # creates loop for menu options
             UP_M = input(
                 "\nWhat would you like to do?\n1) Play\n2) Information \n"
-                "3) Settings \n4) Quit\n\n"
+                "3) Settings \n4) ATM \n5) Quit\n\n"
             ).strip().lower()
             if UP_M in ("1", "play"): #Checks for playing the main game
                 print("playing")
@@ -198,7 +231,34 @@ def menu():
                         print("\nOption unavaliable, please try again!") #error code
             elif UP_M in ("3", "settings"):
                 pass
-            elif UP_M in ("4", "quit"):
+            elif UP_M in ("4", "atm"):
+                if USER_WALLET <= 0:
+                    while True:
+                        UP_ATM_N = input(
+                            "\nATM\n"
+                            "\nPLEASE ENTER CARD NUMBER: "
+                        ).strip()
+                        if UP_ATM_N == ATM_NUMBER:
+                            UP_ATM_P = input(
+                                "\nPLEASE ENTER PIN NUMBER: "
+                            )
+                            if UP_ATM_P == 412311:
+                                UP_ATM_W = input(
+                                    f"\n{USER_NAME}'s Bank Account\n"
+                                    f"\nID NUMBER: {ID_ATM_NUBMER}"
+                                    f"\nCARD NUMBER: {ATM_NUMBER}"
+                                    f"\nCurrent Balanced: {USER_BANK}"
+                                    "\nHow much would you like to withdraw? ($1000 MAX)\n"
+                                ).strip().lower()
+                                if UP_ATM_W.isdigit():
+                                    pass #NOT FINISHED_________________
+                else:
+                    print(
+                        f"\nYou still have ${USER_WALLET} and Mum said for ERERGENCIES ONLY."
+                        "\n\nPress any key to go back!"  
+                    )
+                    getch.getch()
+            elif UP_M in ("5", "quit"): 
                 print("\nQuitting Game\n")
                 exit()
             else:
@@ -213,5 +273,5 @@ def menu():
         exit()
 
 print("\nWelcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
-
+NamePick()
 menu()
