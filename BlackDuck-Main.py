@@ -21,11 +21,20 @@ TERMINOLOGY = (
     "\nSplit: After being dealt, you can make another hand by using " \
     "one of the cards given to you (you add the same bet as the " \
     "first hand)"
-    "\nSurender: Give up your the hand and recive half of your bet back"
+    "\nSurrender: Give up your the hand and recive half of your bet back"
 )
-
+CARD_VALUES = (
+    "\nCARD VALUES:\n"
+    "\nThe number on the card is repersents it's value, for example: "
+    "\n6 of Hearts = 6" \
+    "\nWith cards like Duck (Jack), King and Queen, they all have a value of 10, "
+    "for example:\nQueen of Spades = 10"
+    "\nAces has 2 values, if total value of the player's hand is more than 10, "
+    "then the value will be 1, otherwise it will have a value of 11. For"
+    "example:\nTotal card hand value = 10 | Ace of Clubs = 11"
+)
 #----Variables----
-
+#----Card Deck/Value---
 CVL = {} #CVL == Card value list. Create dictionary
 
 for suit in CARD_SUITS: #loops through every card suit
@@ -33,45 +42,42 @@ for suit in CARD_SUITS: #loops through every card suit
         CVL[f"{suit}{value}"] = value
         #Assigns the value to each card (the last number of varible is value)
 
-CVL[f"{suit}D"] = CVL[f"{suit}Q"] = CVL[f"{suit}K"] = 10
-#Creates Duck(Jack), King and Queen, assigns them the value of 10
-CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1 #Creates the logic and variable for Ace
+for suit in CARD_SUITS:
+    CVL[f"{suit}D"] = CVL[f"{suit}Q"] = CVL[f"{suit}K"] = 10
+#Creates Duck (Jack), King and Queen, assigns them the value of 10
+for suit in CARD_SUITS:
+    CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1 #Creates the logic and variable for Ace
 
-CVL2 = CVL.copy()
-print(CVL2)
-print(CVL)
-print(CVL["A"])
+#This code is temp to show how copying, getting random card and removing it.
+CVL_Temp = CVL.copy() #duplicats the dictionary into a changable list
+CP1 = random.choice(list(CVL_Temp.keys()))
+CVL_Temp.pop(CP1)
 # | print(CVL["D2"]+CVL["S4"]) | reminder on how to use dictionary
-
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
-
-CP1 = random.choice(list(CVL2.keys()))
-print(CP1)
-CVL2.pop(CP1)
-print(CVL2)
+#----Card Deck/Value---
 
 def menu():
     '''menu interface/code'''
     try:
         while True: # creates loop for menu options
-            UMP = input(
+            UP_M = input(
                 "\nWhat would you like to do?\n1) Play\n2) Information \n"
                 "3) Settings \n4) Quit\n\n"
             ).strip().lower()
-            if UMP in ("1", "play"): #Checks for playing the main game
+            if UP_M in ("1", "play"): #Checks for playing the main game
                 print("playing")
-            elif UMP in ("2", "information"): #Checks for information
-                UPExit = False #turns of multi loop breaker
+            elif UP_M in ("2", "information"): #Checks for information
+                UP_Exit = False #turns of multi loop breaker
                 while True: #creates loop for infromation menu
-                    UIP = input(
+                    UP_I = input(
                         "\nInformation about this game!\n1) How to play (Normal)\n2) How to play "
                         "(Advanced)\n"
                         "3) Terminology\n4) Card Values\n5) Tips and Tricks\n6) Back\n\n"
                         ).strip().lower()
-                    if UIP in ("1", "how to play (normal)", "htpn"): #checks for How to play normal
+                    if UP_I in ("1", "how to play (normal)", "htpn"): #checks for How to play normal
                         while True: # creates loop for how to play normal (error checker)
-                            UPGN = input(
-                                "\nHow To Play (NORMAL)"
+                            UP_GN = input(
+                                "\nHow To Play (NORMAL)\n"
                                 "\nThe aim of the game is to get higher than the dealer " \
                                 "without going over 21." \
                                 "\nYou and the dealer gets 2 cards each (one of the dealer's " \
@@ -84,7 +90,7 @@ def menu():
                                 "\nOnce you 'hit', your total card value will get closer and " \
                                 "closer to 21."
                                 "\nIf you your total card value goes over 21, then you lose (bust)"
-                                "\nIf you don't want to recive any more cards you stand"
+                                "\nIf you d2n't want to recive any more cards you stand"
                                 "\nAfter standing, dealer gets to recive cards to match or " \
                                 "achieve a higher total card value."
                                 "\n\nIf your total card value matchs the dealer's total " \
@@ -96,20 +102,21 @@ def menu():
                                 "\n\n1) Back"
                                 "\n2) Menu\n\n"
                             ).strip().lower()
-                            if UPGN in ("1", "back"): #Checks for back
+                            if UP_GN in ("1", "back"): #Checks for back
                                 break
-                            elif UPGN in ("2", "menu"): #Checks for menu
-                                UPExit = True #turns on multi loop breaker
+                            elif UP_GN in ("2", "menu"): #Checks for menu
+                                UP_Exit = True #turns on multi loop breaker
                                 break
                             else:
                                 print("\nOption unavaliable, please try again!") #error code
-                        if UPExit:#multi loop breaker
+                        if UP_Exit:#multi loop breaker
                             break
+                    elif UP_I in ("2", "how to play (advanced)", "htpa"):
                         while True: #creates loop for how to play advanced
-                            UPGA = input(
+                            UP_GA = input(
                                 "\nHow To Play (ADVANCED)"
                                     " (Game rules are the same as NORMAL mode except for a few " \
-                                    "actions)"
+                                    "actions)\n"
                                     "\nWhen being dealt the first 2 cards, you are given the " \
                                     "option to split and double down. (Terminology)"
                                     "\nWhen you split, you create a second hand and bet the same " \
@@ -119,48 +126,79 @@ def menu():
                                     "the first 2 cards. You cannot hit then double down."
                                     "\nYou can however split then double down one or both of " \
                                     "your hands."
-                                    "\nThrough the game you can surender which will give you " \
+                                    "\nThrough the game you can surrender which will give you " \
                                     "back half of your bet but give up your hand"
                                     "\n\n1) Back"
                                     "\n2) Menu\n\n"
                             ).strip().lower()
-                            if UPGA in ("1", "back"): #checks for back
+                            if UP_GA in ("1", "back"): #checks for back
                                 break
-                            elif UPGA in ("2", "menu"): #checks for menu
-                                UPExit = True #turn on milti loop breaker
+                            elif UP_GA in ("2", "menu"): #checks for menu
+                                UP_Exit = True #turn on milti loop breaker
                                 break
                             else:
                                 print("\nOption unavaliable, please try again!") #error code
-                        if UPExit: #multi loop breaker
+                        if UP_Exit: #multi loop breaker
                             break
-                    elif UIP == "3" or UIP == "Terminology": #checks for terminology
+                    elif UP_I in ("3", "terminology", "term"):
                         while True: #creates loop for terminology
-                            UPT = input(
+                            UP_T = input(
                                 TERMINOLOGY + "\n\n1) Back\n2) Menu\n\n"
                             ).strip().lower()
-                            if UPT in ("1", "back"): #checks for back
+                            if UP_T in ("1", "back"): #checks for back
                                 break
-                            elif UPT in ("2", "menu"): #checks for menu
-                                UPExit = True # turns on multiloop breaker
+                            elif UP_T in ("2", "menu"): #checks for menu
+                                UP_Exit = True # turns on multiloop breaker
                                 break
                             else:
                                 print("\nOption unavaliable, please try again!") #error code
-                        if UPExit: #multiloop breaker
+                        if UP_Exit: #multiloop breaker
                             break
-                    elif UIP == "4" or UIP == "Card Values": #checks for vard values
-                        while True:
-                            CVI = input(
-                                "\n"
-                            )
-                    elif UIP == "5" or UIP == "Tips and Tricks": #checks for tips and tricks
-                        print("") ###### NOT DONE
-                    elif UIP == "6" or UIP == "Back": #checks for back
+                    elif UP_I == "4" or UP_I == "Card Values": #checks for vard values
+                        while True: #creats a loop for Card values
+                            UP_CV = input(
+                                CARD_VALUES +
+                                "\n\n1) Back"
+                                "\n2) Menu\n\n"
+                            ).strip().lower()
+                            if UP_CV in ("1", "back"): #checks for back
+                                break
+                            elif UP_CV in ("2", "menu"): #checks for menu
+                                UP_Exit = True # turns on multiloop breaker
+                                break
+                            else:
+                                print("\nOption unavaliable, please try again!") #error code
+                        if UP_Exit: #multiloop breaker
+                            break
+                    elif UP_I in ("5", "tips and tricks", "tat", "t&t"): #checks for tips and tricks
+                        while True: #creates loop for Tips and Tricks
+                            UP_TT = input(
+                                "\nTips and Tricks\n"
+                                "\nJacks are replaced by Ducks in this game. I know, great idea"
+                                "\nType the number that is in front of the option to move throught" \
+                                "the menu quicker"
+                                "\nWhen in an information options you can type \"Menu\" (or 2) to go back" \
+                                "to the main menu"
+                                "\n----MORE TIPS IN THE FUTURE----"
+                                "\n\n1) Back"
+                                "\n2) Menu"
+                            ).strip().lower()
+                            if UP_TT in ("1", "back"): #checks for back
+                                break
+                            elif UP_TT in ("2", "menu"): #checks for menu
+                                UP_Exit = True # turns on multiloop breaker
+                                break
+                            else:
+                                print("\nOption unavaliable, please try again!") #error code
+                        if UP_Exit: #multiloop breaker
+                            break
+                    elif UP_I in ("6", "Back"): #checks for back
                         break
                     else:
                         print("\nOption unavaliable, please try again!") #error code
-            elif UMP in ("3", "settings"):
+            elif UP_M in ("3", "settings"):
                 pass
-            elif UMP in ("4", "quit"):
+            elif UP_M in ("4", "quit"):
                 print("\nQuitting Game\n")
                 exit()
             else:
