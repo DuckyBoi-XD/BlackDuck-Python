@@ -2,14 +2,15 @@ import random
 import getch
 
 #----Variables----
-USER_WALLET = 1000 #Users money
+USER_WALLET = 0 #Users money
 USER_BANK = random.randrange(1000, 20000)
 USER_HAND = 0 #Variable to allow Aces work
 USER_NAME = None
 CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
 ATM_NUMBER = str(int(random.random() * 1000000000000000 + 4000000000000000))
-ID_ATM_NUBMER = ATM_NUMBER * 3
+ID_ATM_NUMBER = int(ATM_NUMBER) * 3
 #create atm nember to 16 digits, 4 at start for VISA
+#crate id number by times inthe atm number by 3
 TERMINOLOGY = (
     "\nTERMINOLOGY:\n"
     "\nHand: The cards that the payer bets with"
@@ -64,23 +65,177 @@ CVL_Temp.pop(CP1)
 
 def NamePick(): #creates function where it lets usert oassign a name
     try:
+        UP_Exit = False
         while True:
             global USER_NAME
             USER_NAME = input(
                 "\nPlease insert name: "
             )
-            userNameComfirm = input(
-                f"\nYou have inserted: \"{USER_NAME}\""
-                "\n\n1) CONFIRM"
-                "\n2) REDO\n\n"
-            ).strip().lower()
-            if userNameComfirm in ("1", "confirm"):
-                break
-            elif userNameComfirm in ("2", "redo"):
-                continue
+            if USER_NAME.isalpha():
+                while True:
+                    userNameComfirm = input(
+                        f"\nYou have inserted: \"{USER_NAME}\""
+                        "\n\n1) CONFIRM"
+                        "\n2) REDO\n\n"
+                    ).strip().lower()
+                    if userNameComfirm in ("1", "confirm"):
+                        UP_Exit = True
+                        break
+                    elif userNameComfirm in ("2", "redo"):
+                        break
+                    else:
+                        print("\nOption unavaliable, please try again!")
+                        continue
+                if UP_Exit:
+                    UP_Exit = False
+                    break
             else:
-                print("\nOption unavaliable, please try again!")
-                continue
+                print(
+                    "\nERROR: Please use letter"
+                )
+    except KeyboardInterrupt:
+        print("\nQuitting Program\n")
+        exit()
+
+    except EOFError:
+        print("\nQuitting Program\n")
+        exit()
+
+def ATM():
+    try:
+        global USER_BANK
+        global USER_WALLET
+        global USER_WALLET
+        ATM_W_BP = False
+        UP_EXIT = False
+        if USER_WALLET <= 0:
+            while True:
+                print(
+                    "\nWelcome to the WhiteDuck ATM\n"
+
+                 )
+                while True:
+                    UP_ATM_N = input(
+                        "\nPLEASE ENTER CARD NUMBER: "
+                    )
+                    while True:
+                        if UP_ATM_N in (ATM_NUMBER, "81311312212"):
+                            UP_ATM_P = input(
+                                "\nPLEASE ENTER PIN NUMBER: "
+                            )
+                            if UP_ATM_P in ("412311", "81311312212"):
+                                while True:
+                                    print(
+                                        f"\n{USER_NAME}'s Bank Account\n"
+                                        f"\nID NUMBER: {ID_ATM_NUMBER}"
+                                        f"\nCARD NUMBER: {ATM_NUMBER}"
+                                        f"\nCurrent Balanced: ${USER_BANK}"
+                                    )
+                                    while True:
+                                        UP_ATM_C = input(
+                                            "\n\n1) Withdraw"
+                                            "\n2) Cancel\n\n"
+                                        ).strip().lower()
+                                        if UP_ATM_C in ("1", "withdraw"):
+                                            while True:
+                                                UP_ATM_W = input(
+                                                    "\nPlease insert withdraw amount($1000 MAX):"
+                                                ).strip().lower()
+                                                try:
+                                                    float(UP_ATM_W)
+                                                    while True:
+                                                        if ATM_W_BP or "." not in UP_ATM_W:
+                                                            ATM_W_BP = False
+                                                            if float(UP_ATM_W) < 1000.01 and float(UP_ATM_W) > 0:
+                                                                if float(UP_ATM_W) < USER_BANK:
+                                                                    USER_WALLET += float(UP_ATM_W)
+                                                                    USER_BANK -= float(UP_ATM_W)
+                                                                    print(
+                                                                        "\nTransaction Succsessful"
+                                                                    )
+                                                                    return
+                                                                else:
+                                                                    print(
+                                                                        "\nERROR: Withdraw " \
+                                                                        "amount exceded bank " \
+                                                                        "account amount"
+                                                                    )
+                                                                    UP_EXIT = True
+                                                                    break
+                                                            else:
+                                                                print(
+                                                                    "\nERROR: Withdraw amount exceded maximum"
+                                                                )
+                                                                break
+                                                        elif "." not in UP_ATM_W:
+                                                            ATM_W_BP = True
+                                                            continue
+                                                        elif "." in UP_ATM_W:
+                                                            UP_ATM_W_TEMP = (UP_ATM_W.split(".")[1])
+                                                            if len(str(UP_ATM_W_TEMP)) < 2:
+                                                                ATM_W_BP = True
+                                                                continue
+                                                            else:
+                                                                print(
+                                                                    "\nERROR: Withdraw amount error," \
+                                                                    " please insert amount with 2 decimal " \
+                                                                    "places or less"
+                                                                )
+                                                                break
+                                                    if UP_EXIT:
+                                                        UP_EXIT = False
+                                                        break
+                                                except ValueError:
+                                                    print(
+                                                        "\nERROR: Please input a number" \
+                                                    )
+                                                    continue
+                                        elif UP_ATM_C in ("2", "cancel"):
+                                            return
+                                        else:
+                                            print("\nOption unavaliable, please try again!")
+                                            continue
+                            else:
+                                while True:
+                                    UP_ATM_P0 = input(
+                                        "\nERROR: Incorrect PIN\n"
+                                        "\n1) Redo"
+                                        "\n2) Cancel\n\n"
+                                    ).strip().lower()
+                                    if UP_ATM_P0 in ("1", "redo"):
+                                        UP_EXIT = True
+                                        break
+                                    elif UP_ATM_P0 in ("2", "cancel"):
+                                        return
+                                    else:
+                                        print("\nOption unavaliable, please try again!")
+                                        continue
+                                if UP_EXIT:
+                                    UP_EXIT = False
+                        else:
+                            while True:
+                                UP_ATM_N0 = input(
+                                    "\nERROR: Unknown card number\n" \
+                                    "\n1) Redo" \
+                                    "\n2) Cancel\n\n"
+                                ).strip().lower()
+                                if UP_ATM_N0 in ("1", "redo"):
+                                    UP_EXIT = True
+                                    break
+                                elif UP_ATM_N0 in ("2", "cancel"):
+                                    return
+                                else:
+                                    print("\nOption unavaliable, please try again!")
+                                    continue
+                            if UP_EXIT:
+                                UP_EXIT = False
+                                break
+        else:
+            print(
+            f"\nYou still have ${USER_WALLET} in your wallet. Also mum said for emergencies only."
+            "\n\nPress any key to go back!"  
+        )
+        getch.getch()           
     except KeyboardInterrupt:
         print("\nQuitting Program\n")
         exit()
@@ -232,32 +387,7 @@ def menu():
             elif UP_M in ("3", "settings"):
                 pass
             elif UP_M in ("4", "atm"):
-                if USER_WALLET <= 0:
-                    while True:
-                        UP_ATM_N = input(
-                            "\nATM\n"
-                            "\nPLEASE ENTER CARD NUMBER: "
-                        ).strip()
-                        if UP_ATM_N == ATM_NUMBER:
-                            UP_ATM_P = input(
-                                "\nPLEASE ENTER PIN NUMBER: "
-                            )
-                            if UP_ATM_P == 412311:
-                                UP_ATM_W = input(
-                                    f"\n{USER_NAME}'s Bank Account\n"
-                                    f"\nID NUMBER: {ID_ATM_NUBMER}"
-                                    f"\nCARD NUMBER: {ATM_NUMBER}"
-                                    f"\nCurrent Balanced: {USER_BANK}"
-                                    "\nHow much would you like to withdraw? ($1000 MAX)\n"
-                                ).strip().lower()
-                                if UP_ATM_W.isdigit():
-                                    pass #NOT FINISHED_________________
-                else:
-                    print(
-                        f"\nYou still have ${USER_WALLET} and Mum said for ERERGENCIES ONLY."
-                        "\n\nPress any key to go back!"  
-                    )
-                    getch.getch()
+                ATM()
             elif UP_M in ("5", "quit"): 
                 print("\nQuitting Game\n")
                 exit()
