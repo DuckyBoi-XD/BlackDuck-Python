@@ -2,13 +2,15 @@ import random
 import getch
 
 #----Variables----
-USER_WALLET = 0 #Users money
+GAME_MODE = None
+USER_WALLET = 1000 #Users money
 USER_BANK = random.randrange(1000, 20000)
 USER_HAND = 0 #Variable to allow Aces work
 USER_NAME = None
 CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
 ATM_NUMBER = str(int(random.random() * 1000000000000000 + 4000000000000000))
 ID_ATM_NUMBER = int(ATM_NUMBER) * 3
+BlackDuck_Config = 0
 #create atm nember to 16 digits, 4 at start for VISA
 #crate id number by times inthe atm number by 3
 TERMINOLOGY = (
@@ -29,18 +31,21 @@ TERMINOLOGY = (
     "one of the cards given to you (you add the same bet as the " \
     "first hand)"
     "\nSurrender: Give up your the hand and recive half of your bet back"
-)
+) #to use in multiple places
 CARD_VALUES = (
     "\nCARD VALUES:\n"
+    "\nCard are labeled with the suit in front and value on the end. For " \
+    "example: C9 = 9 of Clubs or DK = King of Diamonds"
     "\nThe number on the card is repersents it's value, for example: "
-    "\n6 of Hearts = 6" \
+    "\nH6 = 6" \
     "\nWith cards like Duck (Jack), King and Queen, they all have a value of 10, "
-    "for example:\nQueen of Spades = 10"
+    "for example:\nSQ = 10"
     "\nAces has 2 values, if total value of the player's hand is more than 10, "
     "then the value will be 1, otherwise it will have a value of 11. For"
-    "example:\nTotal card hand value = 10 | Ace of Clubs = 11"
-)
+    "example:\nTotal card hand value = 10 | CA = 11"
+) #to use in multiple places
 #----Variables----
+
 #----Card Deck/Value---
 CVL = {} #CVL == Card value list. Create dictionary
 
@@ -52,18 +57,20 @@ for suit in CARD_SUITS: #loops through every card suit
 for suit in CARD_SUITS:
     CVL[f"{suit}D"] = CVL[f"{suit}Q"] = CVL[f"{suit}K"] = 10
 #Creates Duck (Jack), King and Queen, assigns them the value of 10
-for suit in CARD_SUITS:
-    CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1 #Creates the logic and variable for Ace
 
-#This code is temp to show how copying, getting random card and removing it.
-CVL_Temp = CVL.copy() #duplicats the dictionary into a changable list
-CP1 = random.choice(list(CVL_Temp.keys()))
-CVL_Temp.pop(CP1)
+for suit in CARD_SUITS: #Creates the logic and variable for Ace
+    if GAME_MODE == "BlackDuck":
+        CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1
+    elif GAME_MODE == "RTD":
+        CVL[f"{suit}A"] = 11
+
 # | print(CVL["D2"]+CVL["S4"]) | reminder on how to use dictionary
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
 #----Card Deck/Value---
 
-def NamePick(): #creates function where it lets usert oassign a name
+#----
+#----Name Function----
+def namePick(): #creates function where it lets usert oassign a name
     try:
         UP_Exit = False
         while True:
@@ -100,8 +107,10 @@ def NamePick(): #creates function where it lets usert oassign a name
     except EOFError:
         print("\nQuitting Program\n")
         exit()
+#----Name Function----
 
-def ATM():
+#----ATM Fucntion----
+def ATM(): #creates function what allows players to take money from bank
     try:
         global USER_BANK
         global USER_WALLET
@@ -117,12 +126,12 @@ def ATM():
                 while True:
                     UP_ATM_N = input(
                         "\nPLEASE ENTER CARD NUMBER: "
-                    )
+                    ).strip()
                     while True:
                         if UP_ATM_N in (ATM_NUMBER, "81311312212"):
                             UP_ATM_P = input(
                                 "\nPLEASE ENTER PIN NUMBER: "
-                            )
+                            ).strip()
                             if UP_ATM_P in ("412311", "81311312212"):
                                 while True:
                                     print(
@@ -139,7 +148,7 @@ def ATM():
                                         if UP_ATM_C in ("1", "withdraw"):
                                             while True:
                                                 UP_ATM_W = input(
-                                                    "\nPlease insert withdraw amount($1000 MAX):"
+                                                    "\nPlease insert withdraw amount ($1000 MAX):"
                                                 ).strip().lower()
                                                 try:
                                                     float(UP_ATM_W)
@@ -148,12 +157,24 @@ def ATM():
                                                             ATM_W_BP = False
                                                             if float(UP_ATM_W) < 1000.01 and float(UP_ATM_W) > 0:
                                                                 if float(UP_ATM_W) < USER_BANK:
-                                                                    USER_WALLET += float(UP_ATM_W)
-                                                                    USER_BANK -= float(UP_ATM_W)
-                                                                    print(
-                                                                        "\nTransaction Succsessful"
-                                                                    )
-                                                                    return
+                                                                    while True:
+                                                                        UP_ATM_Confirmation = input(
+                                                                            "\nConfirm with pin: "
+                                                                        ).strip()
+                                                                        if UP_ATM_Confirmation in ("412311", "81311312212"):
+                                                                            USER_WALLET += float(UP_ATM_W)
+                                                                            USER_BANK -= float(UP_ATM_W)
+                                                                            print(
+                                                                                "\nTransaction Succsessful"
+                                                                                f"\nBANK ACCOUNT: ${USER_BANK}"
+                                                                                f"\nWALLET: ${USER_WALLET}"
+                                                                            )
+                                                                            return
+                                                                        else:
+                                                                            print(
+                                                                                "\nERROR: INCORRECT PIN"
+                                                                                "\nTry Again\n"
+                                                                            )
                                                                 else:
                                                                     print(
                                                                         "\nERROR: Withdraw " \
@@ -235,7 +256,7 @@ def ATM():
             f"\nYou still have ${USER_WALLET} in your wallet. Also mum said for emergencies only."
             "\n\nPress any key to go back!"  
         )
-        getch.getch()           
+        getch.getch()    
     except KeyboardInterrupt:
         print("\nQuitting Program\n")
         exit()
@@ -243,17 +264,24 @@ def ATM():
     except EOFError:
         print("\nQuitting Program\n")
         exit()
+#----ATM Fucntion----
 
+#----Menu Function----
 def menu():
-    '''menu interface/code'''
+    global GAME_MODE
     try:
         while True: # creates loop for menu options
             UP_M = input(
                 "\nWhat would you like to do?\n1) Play\n2) Information \n"
                 "3) Settings \n4) ATM \n5) Quit\n\n"
             ).strip().lower()
-            if UP_M in ("1", "play"): #Checks for playing the main game
-                print("playing")
+            if UP_M in ("1", "BlackDuck"): #Checks for playing game
+                GAME_MODE = "BlackDuck"
+                if BlackDuck_Config == 0:
+                    BD_GM = input("\nBlackDuck Mode:"
+                        "\n\n1) Normal"
+                        "\n2) Advanced\n"
+                    ).strip().lower() ##### NOT DONE
             elif UP_M in ("2", "information"): #Checks for information
                 UP_Exit = False #turns of multi loop breaker
                 while True: #creates loop for infromation menu
@@ -264,8 +292,7 @@ def menu():
                         ).strip().lower()
                     if UP_I in ("1", "how to play (normal)", "htpn"): #checks for How to play normal
                         while True: # creates loop for how to play normal (error checker)
-                            UP_GN = input(
-                                "\nHow To Play (NORMAL)\n"
+                            UP_GN = input("\nHow To Play (NORMAL)\n"
                                 "\nThe aim of the game is to get higher than the dealer " \
                                 "without going over 21." \
                                 "\nYou and the dealer gets 2 cards each (one of the dealer's " \
@@ -360,13 +387,16 @@ def menu():
                             break
                     elif UP_I in ("5", "tips and tricks", "tat", "t&t"): #checks for tips and tricks
                         while True: #creates loop for Tips and Tricks
-                            UP_TT = input(
-                                "\nTips and Tricks\n"
+                            UP_TT = input("\nTips and Tricks\n"
                                 "\nJacks are replaced by Ducks in this game. I know, great idea"
                                 "\nType the number that is in front of the option to move throught" \
                                 "the menu quicker"
                                 "\nWhen in an information options you can type \"Menu\" (or 2) to go back" \
                                 "to the main menu"
+                                "\nRan out of money to gable with? Use the VISA card your mum gave you"
+                                f"({ATM_NUMBER})."
+                                "\nIf you want always want to play black on a certain mode, go to setting " \
+                                "and switch it to your desired mode"
                                 "\n----MORE TIPS IN THE FUTURE----"
                                 "\n\n1) Back"
                                 "\n2) Menu"
@@ -385,10 +415,27 @@ def menu():
                     else:
                         print("\nOption unavaliable, please try again!") #error code
             elif UP_M in ("3", "settings"):
-                pass
+                global BlackDuck_Config
+                global Settings_Config
+                while True:
+                        print("\nSettings")
+                        if BlackDuck_Config == 0:
+                            print("\n\n1) BlackDuck Game Mode : | Normal | Advanced |-Manual-|")
+                        elif BlackDuck_Config == 1:
+                            print("\n\n1) BlackDuck Game Mode : |-Normal-| Advanced | Manual |")
+                        elif BlackDuck_Config == 2:
+                            print("\n\n1) BlackDuck Game Mode : | Normal |-Advanced-| Manual |")
+                        #Add here for different settings    
+                            if Settings_Config in ("1", "BlackDuck", "BlackDuck Game", "BlackDuck Game Mode", "BGM")
+                                if BlackDuck_Config == 3:
+                                    BlackDuck_Config = 0
+                                else:
+                                    BlackDuck_Config += 1               
+                    
+
             elif UP_M in ("4", "atm"):
                 ATM()
-            elif UP_M in ("5", "quit"): 
+            elif UP_M in ("5", "quit"):
                 print("\nQuitting Game\n")
                 exit()
             else:
@@ -401,7 +448,72 @@ def menu():
     except EOFError:
         print("\nQuitting Program\n")
         exit()
+#----Menu Function----
 
-print("\nWelcome to BlackDuck. Just like Blackjack, but with ducks!\nYou start with $1000.")
-NamePick()
+#----Blackjack Function----
+def blackDuck():
+    print(
+        "\nWelcome to BlackDuck. Just like Blackjack, but with ducks!"
+    )
+    if USER_WALLET > 0.99:
+        while True:
+            UP_Bet = input(
+                "\nInsert bet amount ($1 MIN): "
+            ).strip()
+            if UP_Bet.isdigit():
+                if UP_Bet > 0:
+                    if UP_Bet < USER_WALLET:
+                        while True:
+                            UP_Bet_Confirmation = input(
+                                f"\nYou have picked ${UP_Bet} to bet"
+                                "\n\n1) Confirm"
+                                "\n2) Redo"
+                            )
+                            if UP_Bet_Confirmation in ("1", "confirm"):
+                                cvl_temp = CVL.copy()
+                                DC1 = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(DC1)
+                                PC1 = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(PC1)
+                                DC2 = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(DC2)
+                                PC2 = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(PC2)
+                                while True:
+                                    UP_BlackDuck = input(
+                                        f"\nDealers hand: ##, {DC2}"
+                                    )
+                            elif UP_Bet_Confirmation in ("2", "confirm"):
+                                break
+                            else:
+                                print(
+                                    "\nOption not avaliable, please try again!"
+                                )
+                                continue
+                    else:
+                        print(
+                            "\nERROR: Bet amount is larger than player's wallet"
+                        )
+                        continue
+                else:
+                    print(
+                        "\nERROR: Bet amount is under minimum bet ($1)\n"
+                )
+            else:
+                print(
+                    "\nERROR: Please input a number\n"
+                )
+                continue
+    else:
+        print(
+            "\nYou don't have enough money to gable with" \
+            "\nPress any key to go back"
+        )
+        getch.getch()
+
+#----Blackjack Function----
+
+
+print("\nWelcome to DuckyGamble, a game to gamble in.\nYou start with $1000.")
+namePick()
 menu()
