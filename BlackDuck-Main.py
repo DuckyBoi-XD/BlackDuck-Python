@@ -10,7 +10,9 @@ USER_NAME = None
 CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
 ATM_NUMBER = str(int(random.random() * 1000000000000000 + 4000000000000000))
 ID_ATM_NUMBER = int(ATM_NUMBER) * 3
-BlackDuck_Config = 0
+BlackDuck_Mode = 0
+BlackDuck_Total = True
+
 #create atm nember to 16 digits, 4 at start for VISA
 #crate id number by times inthe atm number by 3
 TERMINOLOGY = (
@@ -278,10 +280,24 @@ def menu():
             if UP_M in ("1", "BlackDuck"): #Checks for playing game
                 GAME_MODE = "BlackDuck"
                 if BlackDuck_Config == 0:
-                    BD_GM = input("\nBlackDuck Mode:"
-                        "\n\n1) Normal"
-                        "\n2) Advanced\n"
-                    ).strip().lower() ##### NOT DONE
+                    while True:
+                        BD_GM = input("\nBlackDuck Mode:"
+                            "\n\n1) Normal"
+                            "\n2) Advanced\n"
+                            "\n3) Back\n"
+                        ).strip().lower() ##### NOT DONE
+                        if BD_GM in ("1", "normal"):
+                            blackDuckNormal()
+                        elif BD_GM in ("2", "advanced"):
+                            blackDuckAdvanced()
+                        elif BD_GM in ("3", "back"):
+                            break
+                        else:
+                            print("\nOption unavaliable, please try again!")
+                elif BlackDuck_Config == 1:
+                    blackDuckNormal()
+                elif BlackDuck_Config == 2:
+                    blackDuckAdvanced()
             elif UP_M in ("2", "information"): #Checks for information
                 UP_Exit = False #turns of multi loop breaker
                 while True: #creates loop for infromation menu
@@ -415,24 +431,7 @@ def menu():
                     else:
                         print("\nOption unavaliable, please try again!") #error code
             elif UP_M in ("3", "settings"):
-                global BlackDuck_Config
-                global Settings_Config
-                while True:
-                        print("\nSettings")
-                        if BlackDuck_Config == 0:
-                            print("\n\n1) BlackDuck Game Mode : | Normal | Advanced |-Manual-|")
-                        elif BlackDuck_Config == 1:
-                            print("\n\n1) BlackDuck Game Mode : |-Normal-| Advanced | Manual |")
-                        elif BlackDuck_Config == 2:
-                            print("\n\n1) BlackDuck Game Mode : | Normal |-Advanced-| Manual |")
-                        #Add here for different settings    
-                            if Settings_Config in ("1", "BlackDuck", "BlackDuck Game", "BlackDuck Game Mode", "BGM")
-                                if BlackDuck_Config == 3:
-                                    BlackDuck_Config = 0
-                                else:
-                                    BlackDuck_Config += 1               
-                    
-
+                settings()
             elif UP_M in ("4", "atm"):
                 ATM()
             elif UP_M in ("5", "quit"):
@@ -450,8 +449,8 @@ def menu():
         exit()
 #----Menu Function----
 
-#----Blackjack Function----
-def blackDuck():
+#----Blackjack Function Normal----
+def blackDuckNormal():
     print(
         "\nWelcome to BlackDuck. Just like Blackjack, but with ducks!"
     )
@@ -480,6 +479,12 @@ def blackDuck():
                                 PC2 = random.choice(list(cvl_temp.keys()))
                                 cvl_temp.pop(PC2)
                                 while True:
+                                    print(
+                                        f"\nDealers Hand: ## | {DC2} : "
+                                    )
+                                    print(
+                                        f"\nPlayers Hand: {PC1} | {PC2} : "
+                                    )
                                     UP_BlackDuck = input(
                                         f"\nDealers hand: ##, {DC2}"
                                     )
@@ -511,7 +516,48 @@ def blackDuck():
         )
         getch.getch()
 
-#----Blackjack Function----
+#----Blackjack Function Normal----
+
+#----Blackjack Function Advanced----
+def blackDuckAdvanced():
+    pass
+#----Blackjack Function Advanced----
+
+#----Settings Function----
+def settings():
+    global BlackDuck_Config
+    global Settings_Config
+    global BlackDuck_Mode
+    global BlackDuck_Total
+    while True:
+        print("\nSettings")
+        if BlackDuck_Mode == 0:
+            print("\n\n1) BlackDuck Game Mode : | Normal | Advanced |-Manual-|")
+        elif BlackDuck_Mode == 1:
+            print("\n\n1) BlackDuck Game Mode : |-Normal-| Advanced | Manual |")
+        elif BlackDuck_Mode == 2:
+            print("\n\n1) BlackDuck Game Mode : | Normal |-Advanced-| Manual |")
+        if BlackDuck_Total:
+            print("\n2) BlackDuck total counter : |-True-| False |")
+        elif not BlackDuck_Total:
+            print("\n2) BlackDuck total counter : | True |-False-|")
+        #Add here for different settings
+        Settings_Config = input(
+            "\n3) Back\n"
+        ).strip().lower()
+        if Settings_Config in ("1", "blackduck game", "blackDuck game mode", "bgm"):
+            if BlackDuck_Config == 3:
+                BlackDuck_Config = 0
+            else:
+                BlackDuck_Config += 1
+        elif Settings_Config in ("2", "blackduck total", "blackduck total counter", "blackduck counter", "btc"):
+            BlackDuck_Total = not BlackDuck_Total
+        elif Settings_Config in ("3", "back"):
+            break
+        else:
+            print("\nOption unavaliable, please try again!")
+            continue
+#----Settings Function----
 
 
 print("\nWelcome to DuckyGamble, a game to gamble in.\nYou start with $1000.")
