@@ -61,16 +61,16 @@ for suit in CARD_SUITS:
 #Creates Duck (Jack), King and Queen, assigns them the value of 10
 
 for suit in CARD_SUITS: #Creates the logic and variable for Ace
-    if GAME_MODE == "BlackDuck":
-        CVL[f"{suit}A"] = 11 if USER_HAND >= 10 else 1
-    elif GAME_MODE == "RTD":
-        CVL[f"{suit}A"] = 11
+    CVL[f"{suit}A"] = 11
 
 # | print(CVL["D2"]+CVL["S4"]) | reminder on how to use dictionary
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
 #----Card Deck/Value---
+BlackDuckGameHit = 0
+BlackDuckGamStand = False
 
-#----
+
+#----Card Duck/Value---
 #----Name Function----
 def namePick(): #creates function where it lets usert oassign a name
     try:
@@ -279,11 +279,11 @@ def menu():
             ).strip().lower()
             if UP_M in ("1", "BlackDuck"): #Checks for playing game
                 GAME_MODE = "BlackDuck"
-                if BlackDuck_Config == 0:
+                if BlackDuck_Mode == 0:
                     while True:
                         BD_GM = input("\nBlackDuck Mode:"
                             "\n\n1) Normal"
-                            "\n2) Advanced\n"
+                            "\n2) Advanced"
                             "\n3) Back\n"
                         ).strip().lower() ##### NOT DONE
                         if BD_GM in ("1", "normal"):
@@ -294,9 +294,9 @@ def menu():
                             break
                         else:
                             print("\nOption unavaliable, please try again!")
-                elif BlackDuck_Config == 1:
+                elif BlackDuck_Mode == 1:
                     blackDuckNormal()
-                elif BlackDuck_Config == 2:
+                elif BlackDuck_Mode == 2:
                     blackDuckAdvanced()
             elif UP_M in ("2", "information"): #Checks for information
                 UP_Exit = False #turns of multi loop breaker
@@ -411,7 +411,7 @@ def menu():
                                 "to the main menu"
                                 "\nRan out of money to gable with? Use the VISA card your mum gave you"
                                 f"({ATM_NUMBER})."
-                                "\nIf you want always want to play black on a certain mode, go to setting " \
+                                "\nIf you want always want to play blackduck on a certain mode, go to setting " \
                                 "and switch it to your desired mode"
                                 "\n----MORE TIPS IN THE FUTURE----"
                                 "\n\n1) Back"
@@ -460,34 +460,91 @@ def blackDuckNormal():
                 "\nInsert bet amount ($1 MIN): "
             ).strip()
             if UP_Bet.isdigit():
-                if UP_Bet > 0:
-                    if UP_Bet < USER_WALLET:
+                if int(UP_Bet) > 0:
+                    if int(UP_Bet) < USER_WALLET:
                         while True:
                             UP_Bet_Confirmation = input(
                                 f"\nYou have picked ${UP_Bet} to bet"
                                 "\n\n1) Confirm"
-                                "\n2) Redo"
+                                "\n2) Redo\n\n"
                             )
                             if UP_Bet_Confirmation in ("1", "confirm"):
-                                cvl_temp = CVL.copy()
-                                DC1 = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(DC1)
-                                PC1 = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(PC1)
-                                DC2 = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(DC2)
-                                PC2 = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(PC2)
+                                cvl_temp = CVL.copy() #creates variables and dictionaries for code
+                                print(cvl_temp)
+                                DCL = {}
+                                PCL = {}
+                                PCL_Number = 0
+                                DCL_Number = 0
+                                
+                                #selects random number from list and puts them into another list
+                                PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(PCL[PCL_Number])
+                                PCL_Number += 1
+
+                                DCB = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(DCB)
+
+                                PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(PCL[PCL_Number])
+                                PCL_Number += 1
+
+                                DCL[DCL_Number] = random.choice(list(cvl_temp.keys()))
+                                cvl_temp.pop(DCL[DCL_Number])
+                                DCL_Number += 1
+
                                 while True:
+                                    PCH = " | ".join(str(values) for values in PCL.values())
+                                    DCH = " | ".join(str(values) for values in DCL.values())
                                     print(
-                                        f"\nDealers Hand: ## | {DC2} : "
-                                    )
-                                    print(
-                                        f"\nPlayers Hand: {PC1} | {PC2} : "
+                                        f"\nDealers Hand: __ | {DCH}"
+                                        f"\n\nPlayers Hand: {PCH}"
                                     )
                                     UP_BlackDuck = input(
-                                        f"\nDealers hand: ##, {DC2}"
-                                    )
+                                        "\n\n1) Hit | 2) Stand"
+                                        "\n3) Card Values | 4) Terminology\n\n"
+                                    ).strip().lower()
+                                    if UP_BlackDuck in ("1", "hit"):
+                                        while True:
+                                            PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
+                                            cvl_temp.pop(PCL[PCL_Number])
+                                            PCL_Number += 1
+                                            while True:
+                                                print(
+                                                    f"\nDealers Hand: __ | {" | ".join(str(values) for values in DCL.values())}"
+                                                    f"\n\nPlayers Hand: {" | ".join(str(values) for values in PCL.values())}"
+                                                )
+                                                UP_BlackDuck = input(
+                                                "\n\n1) Hit | 2) Stand"
+                                                "\n3) Card Values | 4) Terminology\n\n"
+                                                ).strip().lower()
+                                                if UP_BlackDuck in ("1", "hit"):
+                                                    break
+                                                elif UP_BlackDuck in ("2", "stand"):
+                                                    pass 
+                                                elif UP_BlackDuck in ("3", "card value"):
+                                                    print(CARD_VALUES)
+                                                    continue
+                                                elif UP_BlackDuck in ("4", "terminology"):
+                                                    print(TERMINOLOGY)
+                                                    continue
+                                                else:
+                                                    print(
+                                                        "\nOption not avaliable, please try again!"
+                                                    )
+                                                    continue
+                                    elif UP_BlackDuck in ("2", "stand"):
+                                        pass 
+                                    elif UP_BlackDuck in ("3", "card value"):
+                                        print(CARD_VALUES)
+                                        continue
+                                    elif UP_BlackDuck in ("4", "terminology"):
+                                        print(TERMINOLOGY)
+                                        continue
+                                    else:
+                                        print(
+                                            "\nOption not avaliable, please try again!"
+                                        )
+                                        continue
                             elif UP_Bet_Confirmation in ("2", "confirm"):
                                 break
                             else:
@@ -506,7 +563,7 @@ def blackDuckNormal():
                 )
             else:
                 print(
-                    "\nERROR: Please input a number\n"
+                    "\nERROR: Please input a number"
                 )
                 continue
     else:
@@ -525,7 +582,6 @@ def blackDuckAdvanced():
 
 #----Settings Function----
 def settings():
-    global BlackDuck_Config
     global Settings_Config
     global BlackDuck_Mode
     global BlackDuck_Total
@@ -543,13 +599,13 @@ def settings():
             print("\n2) BlackDuck total counter : | True |-False-|")
         #Add here for different settings
         Settings_Config = input(
-            "\n3) Back\n"
+            "\n3) Back\n\n"
         ).strip().lower()
         if Settings_Config in ("1", "blackduck game", "blackDuck game mode", "bgm"):
-            if BlackDuck_Config == 3:
-                BlackDuck_Config = 0
+            if BlackDuck_Mode == 2:
+                BlackDuck_Mode = 0
             else:
-                BlackDuck_Config += 1
+                BlackDuck_Mode += 1
         elif Settings_Config in ("2", "blackduck total", "blackduck total counter", "blackduck counter", "btc"):
             BlackDuck_Total = not BlackDuck_Total
         elif Settings_Config in ("3", "back"):
