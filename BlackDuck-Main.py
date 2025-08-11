@@ -1,3 +1,5 @@
+import sys
+import time
 import random
 import getch
 
@@ -62,7 +64,6 @@ for suit in CARD_SUITS:
 
 for suit in CARD_SUITS: #Creates the logic and variable for Ace
     CVL[f"{suit}A"] = 11
-
 # | print(CVL["D2"]+CVL["S4"]) | reminder on how to use dictionary
 # | print(random.choices(list(CVL))) | Reminder on how get random value from dictionary
 #----Card Deck/Value---
@@ -71,6 +72,19 @@ BlackDuckGamStand = False
 
 
 #----Card Duck/Value---
+
+#----Typewriter Function----
+def typewriter_effect(sentence, type_delay, delete_delay):
+    # Loop through each character and print the sentence
+    for char in sentence:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(type_delay)
+
+    time.sleep(1)
+
+#----Typewriter Function----
+
 #----Name Function----
 def namePick(): #creates function where it lets usert oassign a name
     try:
@@ -454,6 +468,7 @@ def blackDuckNormal():
     print(
         "\nWelcome to BlackDuck. Just like Blackjack, but with ducks!"
     )
+    global USER_WALLET
     if USER_WALLET > 0.99:
         while True:
             UP_Bet = input(
@@ -470,49 +485,73 @@ def blackDuckNormal():
                             )
                             if UP_Bet_Confirmation in ("1", "confirm"):
                                 cvl_temp = CVL.copy() #creates variables and dictionaries for code
-                                print(cvl_temp)
-                                DCL = {}
-                                PCL = {}
-                                PCL_Number = 0
-                                DCL_Number = 0
-                                
-                                #selects random number from list and puts them into another list
-                                PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(PCL[PCL_Number])
-                                PCL_Number += 1
+                                DCL = {} #creates dealers hand
+                                PCL = {} #creates players hand
 
-                                DCB = random.choice(list(cvl_temp.keys()))
+                                #selects random number from list and puts them into another list
+                                key, value = (random.choice(list(cvl_temp.items())))#makes the card as the number
+                                PCL[key] = value
+                                cvl_temp.pop(key) #removes the picked card out of the list
+                                 
+                                DCB = random.choice(list(cvl_temp.keys())) #creates the blind card on dealer
                                 cvl_temp.pop(DCB)
 
-                                PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(PCL[PCL_Number])
-                                PCL_Number += 1
+                                key, value = (random.choice(list(cvl_temp.items())))
+                                PCL[key] = value
+                                cvl_temp.pop(key) 
 
-                                DCL[DCL_Number] = random.choice(list(cvl_temp.keys()))
-                                cvl_temp.pop(DCL[DCL_Number])
-                                DCL_Number += 1
+                                key, value = (random.choice(list(cvl_temp.items())))
+                                DCL[key] = value
+                                cvl_temp.pop(key)
 
-                                while True:
-                                    PCH = " | ".join(str(values) for values in PCL.values())
-                                    DCH = " | ".join(str(values) for values in DCL.values())
+                                while True: #loops the starting hand options
+                                    D_Total = sum(DCL.values())
+                                    P_Total = sum(PCL.values())
                                     print(
-                                        f"\nDealers Hand: __ | {DCH}"
-                                        f"\n\nPlayers Hand: {PCH}"
+                                        f"\nDealers Hand: __ | {" | ".join(list(DCL.keys()))}", end=""
                                     )
+                                    if BlackDuck_Total:
+                                        print(f" : {D_Total}")
+                                    else:
+                                        print("")
+                                    print(
+                                        f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
+                                    )
+                                    if BlackDuck_Total:
+                                        print(f" : {P_Total}")
+                                    #prints each of the hand values with a "|" between them
+                                    #check if Blackduck total is on and add total
                                     UP_BlackDuck = input(
                                         "\n\n1) Hit | 2) Stand"
                                         "\n3) Card Values | 4) Terminology\n\n"
                                     ).strip().lower()
                                     if UP_BlackDuck in ("1", "hit"):
                                         while True:
-                                            PCL[PCL_Number] = random.choice(list(cvl_temp.keys()))
-                                            cvl_temp.pop(PCL[PCL_Number])
-                                            PCL_Number += 1
+                                            D_Total = sum(DCL.values())
+                                            P_Total = sum(PCL.values())
+                                            key, value = (random.choice(list(cvl_temp.items())))
+                                            PCL[key] = value
+                                            cvl_temp.pop(key)
                                             while True:
                                                 print(
-                                                    f"\nDealers Hand: __ | {" | ".join(str(values) for values in DCL.values())}"
-                                                    f"\n\nPlayers Hand: {" | ".join(str(values) for values in PCL.values())}"
+                                                    f"\nDealers Hand: __ | {" | ".join(list(DCL.keys()))}", end=""
                                                 )
+                                                if BlackDuck_Total:
+                                                    print(f" : {D_Total}")
+                                                print(
+                                                    f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
+                                                )
+                                                if BlackDuck_Total:
+                                                   print(f" : {P_Total}")
+                                                if P_Total > 21:
+                                                    print(
+                                                        "\nYou busted, better luck next time!"
+                                                        f"\nYou lost ${UP_Bet}"
+                                                        "\nPress any key to go back!"
+                                                    )
+                                                    USER_WALLET -= int(UP_Bet)
+                                                    getch.getch()
+                                                    return
                                                 UP_BlackDuck = input(
                                                 "\n\n1) Hit | 2) Stand"
                                                 "\n3) Card Values | 4) Terminology\n\n"
@@ -533,7 +572,24 @@ def blackDuckNormal():
                                                     )
                                                     continue
                                     elif UP_BlackDuck in ("2", "stand"):
-                                        pass 
+                                        while True:
+                                            D_Total = sum(DCL.values())
+                                            P_Total = sum(PCL.values())
+                                            print(
+                                                f"\nDealers Hand: {DCB} | {" | ".join(list(DCL.keys()))}", end=""
+                                            )
+                                            if BlackDuck_Total:
+                                                print(f" : {D_Total}")
+                                            print(
+                                                f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
+                                            )
+                                            if BlackDuck_Total:
+                                                print(f" : {P_Total}")
+                                            print("Press any key to continue")
+                                            getch.getch()
+                                            while True:
+                                                pass #NOT DONE
+
                                     elif UP_BlackDuck in ("3", "card value"):
                                         print(CARD_VALUES)
                                         continue
