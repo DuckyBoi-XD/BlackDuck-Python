@@ -469,6 +469,12 @@ def blackDuckNormal():
         "\nWelcome to BlackDuck. Just like Blackjack, but with ducks!"
     )
     global USER_WALLET
+    global DCL
+    global DCB
+    global PCL
+    global cvl_temp
+    global UP_Bet
+    Stand_Override = False
     if USER_WALLET > 0.99:
         while True:
             UP_Bet = input(
@@ -507,28 +513,35 @@ def blackDuckNormal():
                                 cvl_temp.pop(key)
 
                                 while True: #loops the starting hand options
-                                    D_Total = sum(DCL.values())
-                                    P_Total = sum(PCL.values())
-                                    print(
-                                        f"\nDealers Hand: __ | {" | ".join(list(DCL.keys()))}", end=""
-                                    )
-                                    if BlackDuck_Total:
-                                        print(f" : {D_Total}")
+                                    if Stand_Override:
+                                        print("Working")
+                                        continue
                                     else:
-                                        print("")
-                                    print(
-                                        f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
-                                    )
-                                    if BlackDuck_Total:
-                                        print(f" : {P_Total}")
-                                    #prints each of the hand values with a "|" between them
-                                    #check if Blackduck total is on and add total
-                                    UP_BlackDuck = input(
-                                        "\n\n1) Hit | 2) Stand"
-                                        "\n3) Card Values | 4) Terminology\n\n"
-                                    ).strip().lower()
+                                        D_Total = sum(DCL.values())
+                                        P_Total = sum(PCL.values())
+                                        print(
+                                            f"\nDealers Hand: __ | {" | ".join(list(DCL.keys()))}", end=""
+                                        )
+                                        if BlackDuck_Total:
+                                            print(f" : {D_Total}")
+                                        else:
+                                            print("")
+                                        print(
+                                            f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
+                                        )
+                                        if BlackDuck_Total:
+                                            print(f" : {P_Total}")
+                                        #prints each of the hand values with a "|" between them
+                                        #check if Blackduck total is on and add total
+                                        UP_BlackDuck = input(
+                                            "\n\n1) Hit | 2) Stand"
+                                            "\n4th0wrnowrhn3) Card Values | 4) Terminology\n\n"
+                                        ).strip().lower()
+                                    print("Working 2")
                                     if UP_BlackDuck in ("1", "hit"):
                                         while True:
+                                            if Stand_Override:
+                                                break
                                             key, value = (random.choice(list(cvl_temp.items())))
                                             PCL[key] = value
                                             cvl_temp.pop(key)
@@ -550,14 +563,14 @@ def blackDuckNormal():
                                                 if BlackDuck_Total:
                                                    print(f" : {P_Total}")
                                                 if P_Total > 21:
+                                                    USER_WALLET -= int( UP_Bet)
                                                     while True:
-                                                        USER_WALLET -= int( UP_Bet)
                                                         BD_GO = input(
                                                             "\nYOU BUSTED!!!"
                                                             "\nYou went over 21, better luck next time!"
                                                             f"\nYou lost ${UP_Bet}\n"
                                                             "\n1) Play again"
-                                                            "\n2) Back\n"
+                                                            "\n2) Back\n\n"
                                                         ).strip().lower()
                                                         if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                             blackDuckNormal()
@@ -574,7 +587,8 @@ def blackDuckNormal():
                                                 if UP_BlackDuck in ("1", "hit"):
                                                     break
                                                 elif UP_BlackDuck in ("2", "stand"):
-                                                    pass #NOT DONE
+                                                    Stand_Override = True
+                                                    break
                                                 elif UP_BlackDuck in ("3", "card value"):
                                                     print(CARD_VALUES)
                                                     continue
@@ -586,7 +600,9 @@ def blackDuckNormal():
                                                         "\nOption not avaliable, please try again!"
                                                     )
                                                     continue
-                                    elif UP_BlackDuck in ("2", "stand"):
+                                    elif UP_BlackDuck in ("2", "stand") or Stand_Override:
+                                        if Stand_Override:
+                                            Stand_Override = False
                                         while True:
                                             D_Total = sum(DCL.values()) + sum(DCB.values())
                                             P_Total = sum(PCL.values())
@@ -603,29 +619,14 @@ def blackDuckNormal():
                                             print("\nPress any key to continue\n")
                                             getch.getch()
                                             while True:
-                                                key, value = (random.choice(list(cvl_temp.items())))
-                                                DCL[key] = value
-                                                cvl_temp.pop(key)
                                                 if D_Total > 21:
-                                                    for card in DCL:
-                                                        if "A" in card:
-                                                            card = 1
-                                                D_Total = sum(DCL.values())
-                                                P_Total = sum(PCL.values())
-                                                print(
-                                                    f"\nDealers Hand: __ | {" | ".join(list(DCL.keys()))}", end=""
-                                                )
-                                                if BlackDuck_Total:
-                                                    print(f" : {D_Total}")
-                                                print(
-                                                    f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
-                                                )
-                                                if D_Total > P_Total:
+                                                    USER_WALLET += 2*int(UP_Bet)
                                                     BD_GO = input(
-                                                        "\nYOU LOST!!!"
-                                                        "\nThe dealer got a higher number, better luck next time!"
-                                                        f"\nYou lost ${UP_Bet}\n"
-                                                        "\nPress any key to go back!\n"
+                                                       "\nYOU WON!!!"
+                                                       "\nThe dealer busted."
+                                                       f"\nYou recive {2*UP_Bet}\n"
+                                                       "\n1) Play again"
+                                                       "\n2) Back\n\n"
                                                     ).strip().lower()
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckNormal()
@@ -635,13 +636,61 @@ def blackDuckNormal():
                                                     else:
                                                         print("\nOption not avaliable, please try again!")
                                                         continue
+                                                elif D_Total > P_Total:
+                                                    USER_WALLET -= int(UP_Bet)
+                                                    while True:
+                                                        BD_GO = input(
+                                                            "\nYOU LOST!!!"
+                                                            "\nThe dealer got a higher number, better luck next time!"
+                                                            f"\nYou lost ${UP_Bet}\n"
+                                                            "\n1) Play again"
+                                                            "\n2) Back\n\n"
+                                                        ).strip().lower()
+                                                        if BD_GO in ("1", "play", "again", "play again", "pa"):
+                                                            blackDuckNormal()
+                                                            return
+                                                        elif BD_GO in ("2", "back"):
+                                                            return
+                                                        else:
+                                                            print("\nOption not avaliable, please try again!")
+                                                            continue
                                                 elif D_Total == P_Total:
-                                                    print(
-
-                                                    )
-                                                elif D_Total > 21:
-                                                    pass #NOT DONE (DEALER BUSTS)
-                                                elif D_Total < P_Total:
+                                                    BD_GO = input(
+                                                        "\nYOU TIED!!!"
+                                                        "\nThe dealer got the same amount of cards as you."
+                                                        f"\n${UP_Bet} is returned to you\n"
+                                                        "\n1) Play again"
+                                                        "\n2) Back\n\n"
+                                                    ).strip().lower()
+                                                    if BD_GO in ("1", "play", "again", "play again", "pa"):
+                                                        blackDuckNormal()
+                                                        return
+                                                    elif BD_GO in ("2", "back"):
+                                                        return
+                                                    else:
+                                                        print("\nOption not avaliable, please try again!")
+                                                        continue
+                                                key, value = (random.choice(list(cvl_temp.items())))
+                                                DCL[key] = value
+                                                cvl_temp.pop(key)
+                                                if D_Total > 21:
+                                                    for card in DCL:
+                                                        if "A" in card:
+                                                            card = 1
+                                                D_Total = sum(DCL.values()) + sum(DCB.values())
+                                                P_Total = sum(PCL.values())
+                                                print(
+                                                    f"\nDealers Hand: {list(DCB.keys())[0]} | {" | ".join(list(DCL.keys()))}", end=""
+                                                )
+                                                if BlackDuck_Total:
+                                                    print(f" : {D_Total}")
+                                                print(
+                                                    f"\nPlayers Hand: {" | ".join(list(PCL.keys()))}", end=""
+                                                )
+                                                if BlackDuck_Total:
+                                                    print(f" : {P_Total}")
+                                                print("")
+                                                if D_Total < P_Total:
                                                     continue
                                     elif UP_BlackDuck in ("3", "card value"):
                                         print(CARD_VALUES)
