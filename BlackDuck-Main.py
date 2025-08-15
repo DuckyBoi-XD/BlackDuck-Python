@@ -6,7 +6,7 @@ import getch
 #----Variables----
 GAME_MODE = None
 USER_WALLET = 1000 #Users money
-USER_BANK = random.randrange(1000, 20000)
+USER_BANK = random.randrange(5000, 7500)
 USER_HAND = 0 #Variable to allow Aces work
 USER_NAME = None
 CARD_SUITS = ("D", "H", "S", "C") #Creates card suits (mainly for CVL code)
@@ -69,16 +69,20 @@ for suit in CARD_SUITS: #Creates the logic and variable for Ace
 #----Card Deck/Value---
 
 #----Typewriter Function----
-def typewriter_effect(sentence, type_delay, delete_delay):
+def print_tw(sentence, type_delay = 0.03):
+    """Simulates typewriter by printing each character of the sentence 1 by 1 with a delay.
+    Args:
+        sentence (str): The sentence to be printed with the typewriter effect.
+        type_delay (float): The delay in seconds between each character.
+
+    Example:
+        print_tw("hi hi hi test hi test", 0.1)
+    """
     # Loop through each character and print the sentence
     for char in sentence:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        time.sleep(type_delay)
-
-    time.sleep(1)
-
-#----Typewriter Function----
+        sys.stdout.write(char)  # prints a character to stdout, without a newline
+        sys.stdout.flush()      # flush output buff
+        time.sleep(type_delay)  # wait for time_delay seconds before printing the next character
 
 #----Name Function----
 def namePick(): #creates function where it lets usert oassign a name
@@ -86,23 +90,23 @@ def namePick(): #creates function where it lets usert oassign a name
         UP_Exit = False
         while True:
             global USER_NAME
-            USER_NAME = input(
-                "\nPlease insert name: "
-            )
+            print_tw("\nPlease insert name: ")
+            USER_NAME = input()
             if USER_NAME.isalpha():
                 while True:
-                    userNameComfirm = input(
+                    print_tw(
                         f"\nYou have inserted: \"{USER_NAME}\""
                         "\n\n1) CONFIRM"
                         "\n2) REDO\n\n"
-                    ).strip().lower()
+                    )
+                    userNameComfirm = input().strip().lower()
                     if userNameComfirm in ("1", "confirm"):
                         UP_Exit = True
                         break
                     elif userNameComfirm in ("2", "redo"):
                         break
                     else:
-                        print("\nOption unavaliable, please try again!")
+                        print_tw("\nOption unavaliable, please try again!")
                         continue
                 if UP_Exit:
                     UP_Exit = False
@@ -282,10 +286,11 @@ def menu():
     global GAME_MODE
     try:
         while True: # creates loop for menu options
-            UP_M = input(
+            print_tw(
                 "\nWhat would you like to do?\n1) Play\n2) Information \n"
-                "3) Settings \n4) ATM \n5) Quit\n\n"
-            ).strip().lower()
+                "3) Settings \n4) ATM \n5) Wallet \n6) Quit\n\n"
+            )
+            UP_M = input().strip().lower()
             if UP_M in ("1", "BlackDuck"): #Checks for playing game
                 GAME_MODE = "BlackDuck"
                 if BlackDuck_Mode == 0:
@@ -448,7 +453,11 @@ def menu():
                 settings()
             elif UP_M in ("4", "atm"):
                 ATM()
-            elif UP_M in ("5", "quit"):
+            elif UP_M in ("5", "wallet"):
+                print()
+                print(USER_WALLET)
+                continue
+            elif UP_M in ("6", "quit"):
                 print("\nQuitting Game\n")
                 exit()
             else:
@@ -514,8 +523,7 @@ def blackDuckNormal():
 
                                 while True: #loops the starting hand options
                                     if Stand_Override:
-                                        print("Working")
-                                        continue
+                                        pass
                                     else:
                                         D_Total = sum(DCL.values())
                                         P_Total = sum(PCL.values())
@@ -538,7 +546,7 @@ def blackDuckNormal():
                                             "\n4th0wrnowrhn3) Card Values | 4) Terminology\n\n"
                                         ).strip().lower()
                                     print("Working 2")
-                                    if UP_BlackDuck in ("1", "hit"):
+                                    if  UP_BlackDuck in ("1", "hit"):
                                         while True:
                                             if Stand_Override:
                                                 break
