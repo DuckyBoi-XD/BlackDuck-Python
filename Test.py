@@ -652,18 +652,16 @@ def blackDuckNormal():
                                                 key, value = (random.choice(list(cvl_temp.items())))
                                                 DCL[key] = value
                                                 cvl_temp.pop(key)
-                                                
-                                                # Handle dealer Aces - combine DCL and DCB for total calculation
-                                                combined_dealer_hand = {**DCL, **DCB}
-                                                D_Total = handle_aces(combined_dealer_hand)
-                                                # Update the individual dictionaries based on changes
-                                                for card_name in DCL:
-                                                    if card_name in combined_dealer_hand:
-                                                        DCL[card_name] = combined_dealer_hand[card_name]
-                                                for card_name in DCB:
-                                                    if card_name in combined_dealer_hand:
-                                                        DCB[card_name] = combined_dealer_hand[card_name]
-                                                        
+                                                while D_Total > 21:
+                                                    if sum(DCB.values()) == 11:
+                                                        for value in DCL:
+                                                            value = 1
+                                                    for item in DCL.items():
+                                                        if value in item == 11:
+                                                            item = 1
+                                                            D_Total = sum(DCL.values())
+                                                            break
+                                                D_Total = sum(DCL.values()) + sum(DCB.values())
                                                 P_Total = sum(PCL.values())
                                                 print_tw(
                                                     f"Dealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
@@ -778,7 +776,13 @@ def blackDuckAdvanced():
                                             PCL[key] = value
                                             cvl_temp.pop(key)
                                             D_Total = sum(DCL.values())
-                                            P_Total = handle_aces(PCL)  # Handle player Aces automatically
+                                            P_Total = sum(PCL.values())
+                                            if P_Total > 21:
+                                                for card_name in list(PCL):
+                                                    if "A" in card_name and PCL[card_name] == 11:
+                                                        PCL[card_name] = 1  # Change Ace from 11 to 1
+                                                        P_Total = sum(PCL.values())  # Recalculate total
+                                                        break  # Only change one Ace at a time
                                             while True:
                                                 print_tw(
                                                     f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
