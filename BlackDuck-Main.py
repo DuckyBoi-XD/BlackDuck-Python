@@ -44,6 +44,12 @@ ID_ATM_NUMBER = int(ATM_NUMBER) * 3
 BlackDuck_Mode = 0
 BlackDuck_Total = True
 GAME_SCORE = 0
+Settings_Config = None
+DCL = {}
+DCB = {}
+PCL = {}
+cvl_temp = {}
+UP_Bet = "0"
 
 def TERMINOLOGY():
     print_tw(
@@ -55,7 +61,7 @@ def TERMINOLOGY():
         "\nPush: If both the dealer and player has the same total value, no one wins and all bets and given back"
         "\nBlackjack: The value of all your cards total up to exactly 21, giving you 2.5x your bet ammount (unless push)"
         "\n\nDouble Down: After being dealt you can double your bet, but after a hitting won't be able to"
-        "\nSplit: After being dealt, you can make another hand by using one of the cards given to you (you add the same bet as the first hand)"
+        "\nSplit: After being dealt, you can split to make another hand out of the other card. This can only be done if both cards are the same and this puts the same bet on the new hand."
         "\nSurrender: Give up your the hand and recive half of your bet back", 0.003
 )
 
@@ -520,6 +526,7 @@ def blackDuckNormal():
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
                                             while True:
+                                                print_tw("--- Players Hand ---",0.01)
                                                 print_tw(
                                                     f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -663,6 +670,7 @@ def blackDuckNormal():
                                                         DCB[card_name] = card_value
                                                 D_Total = sum(DCL.values()) + sum(DCB.values())
                                                 P_Total = sum(PCL.values())
+                                                print_tw("--- Dealders Hand ---",0.01)
                                                 print_tw(
                                                     f"Dealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -778,6 +786,7 @@ def blackDuckAdvanced():
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
                                             while True:
+                                                print_tw("--- Players Hand ---",0.01)
                                                 print_tw(
                                                     f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -921,6 +930,7 @@ def blackDuckAdvanced():
                                                         DCB[card_name] = card_value
                                                 D_Total = sum(DCL.values()) + sum(DCB.values())
                                                 P_Total = sum(PCL.values())
+                                                print_tw("--- Dealers Hand ---",0.01)
                                                 print_tw(
                                                     f"Dealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -942,6 +952,7 @@ def blackDuckAdvanced():
                                             cvl_temp.pop(key)
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
+                                            print_tw("--- Players Hand ---",0.01)
                                             print_tw(
                                                 f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                             if BlackDuck_Total:
@@ -951,8 +962,6 @@ def blackDuckAdvanced():
                                             if BlackDuck_Total:
                                                 print_tw(f" : {P_Total}")
                                                 print_tw("")
-                                            
-                                            # Check if still busted after Ace adjustment
                                             if P_Total > 21:
                                                 while True:
                                                     print_tw(
@@ -978,7 +987,304 @@ def blackDuckAdvanced():
                                             print_tw("\nYou don't have enough money to double down\n")
                                             continue
                                     elif UP_BlackDuck in ("4", "split"):
-                                        pass
+                                        if USER_WALLET >= int(UP_Bet):
+                                            card_values = list(PCL.values())
+                                            if card_values[0] == card_values[1]:  # Same value cards
+                                                USER_WALLET -= int(UP_Bet)
+                                                print_tw(f"\nYou have selected split which bets an extra ${UP_Bet} and creates another hand")
+                                                original_bet = int(UP_Bet)
+
+                                                # Create two separate hands
+                                                PCL1 = {}
+                                                PCL2 = {}
+                                                
+                                                # Split the cards - one card to each hand
+                                                card_names = list(PCL.keys())
+                                                PCL1[card_names[0]] = PCL[card_names[0]]
+                                                PCL2[card_names[1]] = PCL[card_names[1]]
+                                                
+                                                # Deal one more card to each hand
+                                                key, value = (random.choice(list(cvl_temp.items())))
+                                                PCL1[key] = value
+                                                cvl_temp.pop(key)
+                                                key, value = (random.choice(list(cvl_temp.items())))
+                                                PCL2[key] = value
+                                                cvl_temp.pop(key)
+                                                
+                                                # Handle Aces for both hands
+                                                P1_Total = handle_aces(PCL1)
+                                                P2_Total = handle_aces(PCL2)
+                                                D_Total = sum(DCL.values())
+                                                
+                                                # Display the split hands
+                                                print_tw(
+                                                    f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                if BlackDuck_Total:
+                                                    print_tw(f" : {D_Total}")
+                                                print_tw(f"\nPlayers Hand 1: {' | '.join(list(PCL1.keys()))}", 0.01)
+                                                if BlackDuck_Total:
+                                                    print_tw(f" : {P1_Total}")
+                                                print_tw(f"\nPlayers Hand 2: {' | '.join(list(PCL2.keys()))}", 0.01)
+                                                if BlackDuck_Total:
+                                                    print_tw(f" : {P2_Total}")
+                                                
+                                                print_tw(f"\n\nEach hand has a ${original_bet} bet")
+                                                
+                                                # Play Hand 1
+                                                current_bet = original_bet
+                                                hand1_stand = False
+                                                
+                                                print_tw("\n\n--- Playing Hand 1 ---")
+                                                while not hand1_stand:
+                                                    P1_Total = handle_aces(PCL1)
+                                                    D_Total = sum(DCL.values())
+                                                    print_tw(
+                                                        f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {D_Total}")
+                                                    print_tw(f"\nPlayers Hand 1: {' | '.join(list(PCL1.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {P1_Total}")
+                                                    print_tw(
+                                                        "\n\n1) Hit | 2) Stand | 3) Double Down"
+                                                        "\n4) Card Values | 5) Terminology\n\n"
+                                                    , 0.01)
+                                                    UP_Hand1 = input().strip().lower()
+                                                    
+                                                    if UP_Hand1 in ("1", "hit"):
+                                                        key, value = (random.choice(list(cvl_temp.items())))
+                                                        PCL1[key] = value
+                                                        cvl_temp.pop(key)
+                                                        P1_Total = handle_aces(PCL1)
+                                                        
+                                                        print_tw(
+                                                            f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                        if BlackDuck_Total:
+                                                            print_tw(f" : {D_Total}")
+                                                        print_tw(f"\nPlayers Hand 1: {' | '.join(list(PCL1.keys()))}", 0.01)
+                                                        if BlackDuck_Total:
+                                                            print_tw(f" : {P1_Total}")
+                                                        
+                                                        if P1_Total > 21:
+                                                            print_tw("\n\nHAND 1 BUSTED!!!")
+                                                            print_tw("\nHand 1 went over 21!")
+                                                            hand1_stand = True
+                                                            break
+                                                    elif UP_Hand1 in ("2", "stand"):
+                                                        hand1_stand = True
+                                                        break
+                                                    elif UP_Hand1 in ("3", "double down", "dd"):
+                                                        if USER_WALLET >= current_bet:
+                                                            USER_WALLET -= current_bet
+                                                            current_bet *= 2
+                                                            print_tw(f"\nYou doubled down on Hand 1 for an extra ${original_bet}")
+                                                            key, value = (random.choice(list(cvl_temp.items())))
+                                                            PCL1[key] = value
+                                                            cvl_temp.pop(key)
+                                                            P1_Total = handle_aces(PCL1)
+                                                            
+                                                            print_tw(
+                                                                f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                            if BlackDuck_Total:
+                                                                print_tw(f" : {D_Total}")
+                                                            print_tw(f"\nPlayers Hand 1: {' | '.join(list(PCL1.keys()))}", 0.01)
+                                                            if BlackDuck_Total:
+                                                                print_tw(f" : {P1_Total}")
+                                                            
+                                                            if P1_Total > 21:
+                                                                print_tw("\n\nHAND 1 BUSTED!!!")
+                                                                print_tw("\nHand 1 went over 21!")
+                                                            hand1_stand = True
+                                                            break
+                                                        else:
+                                                            print_tw("\nYou don't have enough money to double down on Hand 1\n")
+                                                            continue
+                                                    elif UP_Hand1 in ("4", "card values"):
+                                                        CARD_VALUES()
+                                                        continue
+                                                    elif UP_Hand1 in ("5", "terminology"):
+                                                        TERMINOLOGY()
+                                                        continue
+                                                    else:
+                                                        print_tw("\nOption not avaliable, please try again!\n")
+                                                        continue
+                                                
+                                                # Play Hand 2
+                                                print_tw("\n--- Playing Hand 2 ---")
+                                                current_bet2 = original_bet
+                                                hand2_stand = False
+                                                
+                                                while not hand2_stand:
+                                                    P2_Total = handle_aces(PCL2)
+                                                    D_Total = sum(DCL.values())
+                                                    print_tw(
+                                                        f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {D_Total}")
+                                                    print_tw(f"\nPlayers Hand 2: {' | '.join(list(PCL2.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {P2_Total}")
+                                                    print_tw(
+                                                        "\n\n1) Hit | 2) Stand | 3) Double Down"
+                                                        "\n4) Card Values | 5) Terminology\n\n"
+                                                    , 0.01)
+                                                    UP_Hand2 = input().strip().lower()
+                                                    
+                                                    if UP_Hand2 in ("1", "hit"):
+                                                        key, value = (random.choice(list(cvl_temp.items())))
+                                                        PCL2[key] = value
+                                                        cvl_temp.pop(key)
+                                                        P2_Total = handle_aces(PCL2)
+                                                        
+                                                        print_tw(
+                                                            f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                        if BlackDuck_Total:
+                                                            print_tw(f" : {D_Total}")
+                                                        print_tw(f"\nPlayers Hand 2: {' | '.join(list(PCL2.keys()))}", 0.01)
+                                                        if BlackDuck_Total:
+                                                            print_tw(f" : {P2_Total}")
+                                                        
+                                                        if P2_Total > 21:
+                                                            print_tw("\n\nHAND 2 BUSTED!!!")
+                                                            print_tw("\nHand 2 went over 21!")
+                                                            hand2_stand = True
+                                                            break
+                                                    elif UP_Hand2 in ("2", "stand"):
+                                                        hand2_stand = True
+                                                        break
+                                                    elif UP_Hand2 in ("3", "double down", "dd"):
+                                                        if USER_WALLET >= current_bet2:
+                                                            USER_WALLET -= current_bet2
+                                                            current_bet2 *= 2
+                                                            print_tw(f"\nYou doubled down on Hand 2 for an extra ${original_bet}")
+                                                            key, value = (random.choice(list(cvl_temp.items())))
+                                                            PCL2[key] = value
+                                                            cvl_temp.pop(key)
+                                                            P2_Total = handle_aces(PCL2)
+                                                            
+                                                            print_tw(
+                                                                f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                            if BlackDuck_Total:
+                                                                print_tw(f" : {D_Total}")
+                                                            print_tw(f"\nPlayers Hand 2: {' | '.join(list(PCL2.keys()))}", 0.01)
+                                                            if BlackDuck_Total:
+                                                                print_tw(f" : {P2_Total}")
+                                                            
+                                                            if P2_Total > 21:
+                                                                print_tw("\n\nHAND 2 BUSTED!!!")
+                                                                print_tw("\nHand 2 went over 21!")
+                                                            hand2_stand = True
+                                                            break
+                                                        else:
+                                                            print_tw("\nYou don't have enough money to double down on Hand 2\n")
+                                                            continue
+                                                    elif UP_Hand2 in ("4", "card values"):
+                                                        CARD_VALUES()
+                                                        continue
+                                                    elif UP_Hand2 in ("5", "terminology"):
+                                                        TERMINOLOGY()
+                                                        continue
+                                                    else:
+                                                        print_tw("\nOption not avaliable, please try again!\n")
+                                                        continue
+                                                
+                                                # Now play dealer and resolve both hands
+                                                print_tw("\n\n--- Dealer's Turn ---")
+                                                while True:
+                                                    D_Total = sum(DCL.values()) + sum(DCB.values())
+                                                    P1_Total = handle_aces(PCL1)
+                                                    P2_Total = handle_aces(PCL2)
+                                                    print_tw(
+                                                        f"\nDealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {D_Total}")
+                                                    print_tw(f"\nPlayers Hand 1: {' | '.join(list(PCL1.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {P1_Total}")
+                                                    print_tw(f"\nPlayers Hand 2: {' | '.join(list(PCL2.keys()))}", 0.01)
+                                                    if BlackDuck_Total:
+                                                        print_tw(f" : {P2_Total}")
+                                                    print_tw("\n\nPress any key to continue\n")
+                                                    getch.getch()
+                                                    
+                                                    if D_Total >= 17:
+                                                        break
+                                                    
+                                                    key, value = (random.choice(list(cvl_temp.items())))
+                                                    DCL[key] = value
+                                                    cvl_temp.pop(key)
+                                                    # Handle dealer Aces
+                                                    combined_dealer = {**DCL, **DCB}
+                                                    D_Total = handle_aces(combined_dealer)
+                                                    # Update the original dictionaries
+                                                    for card_name, card_value in combined_dealer.items():
+                                                        if card_name in DCL:
+                                                            DCL[card_name] = card_value
+                                                        elif card_name in DCB:
+                                                            DCB[card_name] = card_value
+                                                
+                                                # Calculate final results for both hands
+                                                total_winnings = 0
+                                                
+                                                # Hand 1 results
+                                                print_tw("\n--- HAND 1 RESULTS ---")
+                                                if P1_Total > 21:
+                                                    print_tw(f"\nHand 1 BUSTED! Lost ${current_bet}")
+                                                elif D_Total > 21:
+                                                    winnings = current_bet * 2
+                                                    total_winnings += winnings
+                                                    USER_WALLET += winnings
+                                                    print_tw(f"\nHand 1 WON! Dealer busted. Won ${winnings}")
+                                                elif P1_Total > D_Total:
+                                                    winnings = current_bet * 2
+                                                    total_winnings += winnings
+                                                    USER_WALLET += winnings
+                                                    print_tw(f"\nHand 1 WON! Won ${winnings}")
+                                                elif P1_Total == D_Total:
+                                                    USER_WALLET += current_bet
+                                                    print_tw(f"\nHand 1 TIED! ${current_bet} returned")
+                                                else:
+                                                    print_tw(f"\nHand 1 LOST! Lost ${current_bet}")
+                                                
+                                                # Hand 2 results
+                                                print_tw("\n\n--- HAND 2 RESULTS ---")
+                                                if P2_Total > 21:
+                                                    print_tw(f"\nHand 2 BUSTED! Lost ${current_bet2}")
+                                                elif D_Total > 21:
+                                                    winnings = current_bet2 * 2
+                                                    total_winnings += winnings
+                                                    USER_WALLET += winnings
+                                                    print_tw(f"\nHand 2 WON! Dealer busted. Won ${winnings}")
+                                                elif P2_Total > D_Total:
+                                                    winnings = current_bet2 * 2
+                                                    total_winnings += winnings
+                                                    USER_WALLET += winnings
+                                                    print_tw(f"\nHand 2 WON! Won ${winnings}")
+                                                elif P2_Total == D_Total:
+                                                    USER_WALLET += current_bet2
+                                                    print_tw(f"\nHand 2 TIED! ${current_bet2} returned")
+                                                else:
+                                                    print_tw(f"\nHand 2 LOST! Lost ${current_bet2}")
+                                                
+                                                if total_winnings > 0:
+                                                    GAME_SCORE += total_winnings
+                                                
+                                                print_tw("\n\n1) Play again\n2) Back\n\n")
+                                                BD_GO = input().strip().lower()
+                                                if BD_GO in ("1", "play", "again", "play again", "pa"):
+                                                    blackDuckAdvanced()
+                                                    return
+                                                elif BD_GO in ("2", "back"):
+                                                    return
+                                                else:
+                                                    print_tw("\nOption not avaliable, please try again!\n")
+                                                    continue
+                                            else:
+                                                print_tw("\nERROR: You can only split cards of the same value\n")
+                                                continue
+                                        elif USER_WALLET < int(UP_Bet):
+                                            print_tw("\nERROR: You don't have enough money to split\n")
+                                            continue
                                     elif UP_BlackDuck in ("5", "card value"):
                                         CARD_VALUES()
                                         continue
