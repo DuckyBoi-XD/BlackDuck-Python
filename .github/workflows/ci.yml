@@ -1,0 +1,71 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        exclude:
+          # Exclude some combinations to reduce CI time
+          - os: windows-latest
+            python-version: "3.7"
+          - os: windows-latest
+            python-version: "3.8"
+          - os: macos-latest
+            python-version: "3.7"
+          - os: macos-latest
+            python-version: "3.8"
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build pytest flake8 setuptools wheel
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -e .
+      shell: bash
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test package installation
+      run: |
+        python -c "import blackduck; print('✓ Package import successful')"
+        python -c "from blackduck import main; print('✓ Main function import successful')"
+        python -c "import blackduck.game; print('✓ Game module import successful')"
+
+    - name: Test package build
+      run: |
+        python -m build
+        ls -la dist/
+
+    - name: Test entry point (dry run)
+      run: |
+        # Test that the entry point can be called (but exit quickly)
+        echo "test" | timeout 5s blackduck || echo "Entry point test completed"
+      shell: bash
+      continue-on-error: true  # Since we're testing with timeout

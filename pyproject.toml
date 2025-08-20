@@ -1,12 +1,9 @@
-[tool.setuptools.packages.find]
-include = ["luck_room_v1"]
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
->>>>>>> ea47878faa0da9f8a2c4d58c0531ee6295f9ecde
 
 [project]
-name = "BlackDuck"
+name = "blackduck-game"
 version = "0.1.0"
 description = "Blackjack but with ducks. And for some reason, a complex ATM system"
 authors = [
@@ -15,10 +12,30 @@ authors = [
 readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.7"
-dependencies = ["getch"]
+dependencies = [
+    "getch"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Board Games",
+]
+keywords = ["blackjack", "game", "card-game", "casino", "duck"]
 
 [project.scripts]
-BlackDuck = "blackduck.game:main"
+blackduck = "blackduck.game:main"
 
 [project.urls]
-"Homepage" = "https://github.com/DuckyBoi-XD/BlackDuck-Python"
+Homepage = "https://github.com/DuckyBoi-XD/BlackJack-Ducky"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["blackduck*"]

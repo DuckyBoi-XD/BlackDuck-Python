@@ -1,0 +1,72 @@
+name: Update Version on Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag name (for manual run)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set tag name variable
+        id: set_tag
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            TAG_NAME="${{ github.event.release.tag_name }}"
+          elif [ -n "${{ github.event.inputs.tag_name }}" ]; then
+            TAG_NAME="${{ github.event.inputs.tag_name }}"
+          else
+            TAG_NAME="unknown"
+          fi
+          
+          # Remove 'v' prefix if present
+          VERSION_NUM=$(echo "$TAG_NAME" | sed 's/^v//')
+          
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "VERSION_NUM=$VERSION_NUM" >> $GITHUB_ENV
+          echo "Using tag: $TAG_NAME, version: $VERSION_NUM"
+
+      - name: Update version in pyproject.toml
+        run: |
+          sed -i "s/version = \".*\"/version = \"$VERSION_NUM\"/" pyproject.toml
+          echo "Updated pyproject.toml with version $VERSION_NUM"
+
+      - name: Update version in setup.py
+        run: |
+          sed -i "s/version=\".*\"/version=\"$VERSION_NUM\"/" setup.py
+          echo "Updated setup.py with version $VERSION_NUM"
+
+      - name: Update version in __init__.py
+        run: |
+          sed -i "s/^__version__ = .*/__version__ = \"$VERSION_NUM\"/" blackduck/__init__.py
+          echo "Updated __init__.py with version $VERSION_NUM"
+
+      - name: Verify changes
+        run: |
+          echo "=== pyproject.toml ==="
+          grep -n "version =" pyproject.toml || true
+          echo "=== setup.py ==="
+          grep -n "version=" setup.py || true
+          echo "=== __init__.py ==="
+          grep -n "__version__" blackduck/__init__.py || true
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(release): update version to ${{ env.VERSION_NUM }} [skip ci]"
+          file_pattern: pyproject.toml setup.py blackduck/__init__.py
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
