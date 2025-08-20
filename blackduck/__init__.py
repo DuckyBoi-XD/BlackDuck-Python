@@ -1,1 +1,3 @@
-from game.py import BlackjackGame
+from .game import main
+# this is good.
+# really?

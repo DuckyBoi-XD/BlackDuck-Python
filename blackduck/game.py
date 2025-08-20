@@ -1351,7 +1351,11 @@ def settings():
             continue
 #----Settings Function----
 
-if __name__ == "__main__":
+def main():
     print_tw("\nWelcome to DuckyGamble, a game to gamble in.\nYou start with $1000.")
     namePick()
     menu()
+#----Game----
+if __name__ == "__main__":
+    main()
+#----Game----
