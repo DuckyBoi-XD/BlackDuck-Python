@@ -1,0 +1,33 @@
+name: Publish Python distribution 📦 to PyPI
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Update RELEASE on GitHub Release"]
+    types:
+      - completed
+      
+permissions:
+  id-token: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+      - name: Build package
+        run: |
+          python -m build
+      - name: Publish to PyPI with Trusted Publisher
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+        # OIDC is used automatically if you have set up PyPI Trusted Publisher
