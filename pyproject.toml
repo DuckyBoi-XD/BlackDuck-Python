@@ -1,15 +1,24 @@
+[tool.setuptools.packages.find]
+include = ["luck_room_v1"]
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+>>>>>>> ea47878faa0da9f8a2c4d58c0531ee6295f9ecde
 
 [project]
-name = "blackduck"
+name = "BlackDuck"
 version = "0.1.0"
-description = "A Python project for the BlackDuck game."
+description = "Blackjack but with ducks. And for some reason, a complex ATM system"
 authors = [
-	{ name = "Your Name", email = "your.email@example.com" }
+    { name="Braeden Sy Tan", email="braedenjairsytan@icloud.com" }
 ]
 readme = "README.md"
-requires-python = ">=3.8"
-dependencies = []
+license = "GPL-3.0-only"
+requires-python = ">=3.7"
+dependencies = ["getch"]
 
+[project.scripts]
+BlackDuck = "blackduck.game:main"
+
+[project.urls]
+"Homepage" = "https://github.com/DuckyBoi-XD/BlackDuck-Python"
