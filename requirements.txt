@@ -1,9 +1,0 @@
-# Runtime dependencies
-getch>=1.0
-
-# Development dependencies (optional)
-# Uncomment if you want to install dev dependencies with: pip install -r requirements.txt
-# pytest>=6.0
-# flake8>=3.8
-# build>=0.7
-# twine>=3.4

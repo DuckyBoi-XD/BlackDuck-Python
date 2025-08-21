@@ -44,11 +44,6 @@ jobs:
           sed -i "s/version = \".*\"/version = \"$VERSION_NUM\"/" pyproject.toml
           echo "Updated pyproject.toml with version $VERSION_NUM"
 
-      - name: Update version in setup.py
-        run: |
-          sed -i "s/version=\".*\"/version=\"$VERSION_NUM\"/" setup.py
-          echo "Updated setup.py with version $VERSION_NUM"
-
       - name: Update version in __init__.py
         run: |
           sed -i "s/^__version__ = .*/__version__ = \"$VERSION_NUM\"/" blackduck/__init__.py
@@ -58,8 +53,6 @@ jobs:
         run: |
           echo "=== pyproject.toml ==="
           grep -n "version =" pyproject.toml || true
-          echo "=== setup.py ==="
-          grep -n "version=" setup.py || true
           echo "=== __init__.py ==="
           grep -n "__version__" blackduck/__init__.py || true
 
@@ -67,6 +60,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(release): update version to ${{ env.VERSION_NUM }} [skip ci]"
-          file_pattern: pyproject.toml setup.py blackduck/__init__.py
+          file_pattern: pyproject.toml blackduck/__init__.py
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
