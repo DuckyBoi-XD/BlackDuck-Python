@@ -14,9 +14,9 @@ BlackDuck is a game commonly known as blackjack. I switched all the jacks with d
 
 ## How to play BlackDuck
 
-1) Go to __________
+1) Go to [https://pypi.org/project/blackduck-game/](https://pypi.org/project/blackduck-game/)
 
-2) once at PyPi, copy the package installation or _____________
+2) once at PyPi, copy the package installation or "pip install blackduck-game"
 
 3) Open Terminal or Command Prompt with python and pip installed. You can check this by using:
 
@@ -24,13 +24,19 @@ BlackDuck is a game commonly known as blackjack. I switched all the jacks with d
     python --version
     ```
 
+    or
+
     ```sh
     python3 --version
     ```
 
+    and
+
     ```sh
     pip3 --version
     ```
+
+    or
 
     ```sh
     pip --version
@@ -39,21 +45,21 @@ BlackDuck is a game commonly known as blackjack. I switched all the jacks with d
 4) Use one of the commands (depending on OS and python type)
 
    ```sh
-   pip install luck-room-v1
+   pip install blackduck-game
    ```
 
    ```sh
-   pip3 install luck-room-v1
+   pip3 install blackduck-game
    ```
 
    ```sh
-   pipx install luck-room-v1
+   pipx install blackduck-game
    ```
 
    ```sh
-   python3 -m pip install luck-room-v1
+   python3 -m pip install blackduck-game
    ```
 
-5) Use the command `BlackDuck` to play the game
+5) Use the command `blackduck` to play the game
 
 6) Start playing and have fun gambling

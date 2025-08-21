@@ -99,6 +99,7 @@ def namePick():
             global USER_NAME
             print_tw("\nPlease insert name: ")
             USER_NAME = input()
+            print_tw("\n=-------------------------=",0.001)
             if USER_NAME.isalpha():
                 while True:
                     print_tw(
@@ -107,6 +108,7 @@ def namePick():
                         "\n2) REDO\n\n"
                     )
                     userNameComfirm = input().strip().lower()
+                    print_tw("\n=-------------------------=",0.001)
                     if userNameComfirm in ("1", "confirm"):
                         UP_Exit = True
                         break
@@ -141,10 +143,12 @@ def ATM():
                 while True:
                     print_tw("\nPLEASE ENTER CARD NUMBER: ")
                     UP_ATM_N = input().strip()
+                    print_tw("\n=-------------------------=",0.001)
                     while True:
                         if UP_ATM_N in (ATM_NUMBER, "81311312212"):
                             print_tw("\nPLEASE ENTER PIN NUMBER: ")
                             UP_ATM_P = input().strip()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_ATM_P in ("412311", "81311312212"):
                                 while True:
                                     print_tw(
@@ -159,12 +163,14 @@ def ATM():
                                             "\n2) Cancel\n\n"
                                         )
                                         UP_ATM_C = input().strip().lower()
+                                        print_tw("\n=-------------------------=",0.001)
                                         if UP_ATM_C in ("1", "withdraw"):
                                             while True:
                                                 print_tw(
                                                     "\nPlease insert withdraw amount ($1000 MAX): "
                                                 )
                                                 UP_ATM_W = input().strip().lower()
+                                                print_tw("\n=-------------------------=",0.001)
                                                 try:
                                                     float(UP_ATM_W)
                                                     while True:
@@ -175,6 +181,7 @@ def ATM():
                                                                     while True:
                                                                         print_tw("\nConfirm with pin: ")
                                                                         UP_ATM_Confirmation = input().strip()
+                                                                        print_tw("\n=-------------------------=",0.001)
                                                                         if UP_ATM_Confirmation in ("412311", "81311312212"):
                                                                             USER_WALLET += float(UP_ATM_W)
                                                                             USER_BANK -= float(UP_ATM_W)
@@ -234,6 +241,7 @@ def ATM():
                                         "\n2) Cancel\n\n"
                                     )
                                     UP_ATM_P0 = input().strip().lower()
+                                    print_tw("\n=-------------------------=",0.001)
                                     if UP_ATM_P0 in ("1", "redo"):
                                         UP_EXIT = True
                                         break
@@ -252,6 +260,7 @@ def ATM():
                                     "\n2) Cancel\n\n"
                                 )
                                 UP_ATM_N0 = input().strip().lower()
+                                print_tw("\n=-------------------------=",0.001)
                                 if UP_ATM_N0 in ("1", "redo"):
                                     UP_EXIT = True
                                     break
@@ -269,6 +278,7 @@ def ATM():
                 "\n\nPress any key to go back!\n"
             )
             getch.getch()
+            print_tw("\n=-------------------------=",0.001)
     except KeyboardInterrupt:
         print_tw(f"\nGame Score: {GAME_SCORE}\n\nQuitting Program\n")
         exit()
@@ -288,6 +298,7 @@ def menu():
                 "3) Settings \n4) ATM \n5) Wallet \n6) Quit\n\n", 0.01
             )
             UP_M = input().strip().lower()
+            print_tw("\n=-------------------------=",0.001)
             if UP_M in ("1", "blackduck", "play"):
                 GAME_MODE = "BlackDuck"
                 if BlackDuck_Mode == 0:
@@ -299,6 +310,7 @@ def menu():
                             "\n3) Back\n\n"
                         )
                         BD_GM = input().strip().lower()
+                        print_tw("\n=-------------------------=",0.001)
                         if BD_GM in ("1", "normal"):
                             print_tw(
                             "\nWelcome to BlackDuck Normal. Just like Blackjack, but with ducks!"
@@ -327,6 +339,7 @@ def menu():
                         "3) Terminology\n4) Card Values\n5) Tips and Tricks\n6) Back\n\n"
                     , 0.01)
                     UP_I = input().strip().lower()
+                    print_tw("\n=-------------------------=",0.001)
                     if UP_I in ("1", "how to play (normal)", "htpn"):
                         while True:
                             print_tw(
@@ -347,6 +360,7 @@ def menu():
                                 "\n2) Menu\n\n", 0.005
                             )
                             UP_GN = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_GN in ("1", "back"):
                                 break
                             elif UP_GN in ("2", "menu"):
@@ -370,6 +384,7 @@ def menu():
                                 "\n2) Menu\n\n", 0.005
                             )
                             UP_GA = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_GA in ("1", "back"):
                                 break
                             elif UP_GA in ("2", "menu"):
@@ -384,6 +399,7 @@ def menu():
                             TERMINOLOGY()
                             print_tw("\n\n1) Back\n2) Menu\n\n")
                             UP_T = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_T in ("1", "back"):
                                 break
                             elif UP_T in ("2", "menu"):
@@ -398,6 +414,7 @@ def menu():
                             CARD_VALUES()
                             print_tw("\n\n1) Back\n2) Menu\n\n")
                             UP_CV = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_CV in ("1", "back"):
                                 break
                             elif UP_CV in ("2", "menu"):
@@ -422,6 +439,7 @@ def menu():
                                 "\n2) Menu\n\n", 0.005
                             )
                             UP_TT = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_TT in ("1", "back"):
                                 break
                             elif UP_TT in ("2", "menu"):
@@ -469,6 +487,7 @@ def blackDuckNormal():
         while True:
             print_tw("\nInsert bet amount ($1 MIN): ")
             UP_Bet = input().strip()
+            print_tw("\n=-------------------------=",0.001)
             if UP_Bet.isdigit():
                 if int(UP_Bet) > 0:
                     if int(UP_Bet) <= USER_WALLET:
@@ -479,6 +498,7 @@ def blackDuckNormal():
                                 "\n2) Redo\n\n"
                             )
                             UP_Bet_Confirmation = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_Bet_Confirmation in ("1", "confirm"):
                                 USER_WALLET -= int(UP_Bet)
                                 cvl_temp = CVL.copy()
@@ -516,6 +536,7 @@ def blackDuckNormal():
                                             "\n3) Card Values | 4) Terminology\n\n"
                                         , 0.01)
                                         UP_BlackDuck = input().strip().lower()
+                                        print_tw("\n=-------------------------=",0.001)
                                     if  UP_BlackDuck in ("1", "hit"):
                                         while True:
                                             if Stand_Override:
@@ -546,6 +567,7 @@ def blackDuckNormal():
                                                             "\n2) Back\n\n"
                                                         , 0.01)
                                                         BD_GO = input().strip().lower()
+                                                        print_tw("\n=-------------------------=",0.001)
                                                         if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                             blackDuckNormal()
                                                             return
@@ -559,6 +581,7 @@ def blackDuckNormal():
                                                     "\n3) Card Values | 4) Terminology\n\n"
                                                 , 0.01)
                                                 UP_BlackDuck = input().strip().lower()
+                                                print_tw("\n=-------------------------=",0.001)
                                                 if UP_BlackDuck in ("1", "hit"):
                                                     break
                                                 elif UP_BlackDuck in ("2", "stand"):
@@ -589,6 +612,7 @@ def blackDuckNormal():
                                                 print_tw(f" : {P_Total}")
                                             print_tw("\n\nPress any key to continue\n")
                                             getch.getch()
+                                            print_tw("\n=-------------------------=",0.001)
                                             while True:
                                                 print("")
                                                 if D_Total > 21:
@@ -613,6 +637,7 @@ def blackDuckNormal():
                                                         , 0.01)
                                                         GAME_SCORE += 2*int(UP_Bet)
                                                     BD_GO = input().strip().lower()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckNormal()
                                                         return
@@ -631,6 +656,7 @@ def blackDuckNormal():
                                                             "\n2) Back\n\n"
                                                         , 0.01)
                                                         BD_GO = input().strip().lower()
+                                                        print_tw("\n=-------------------------=",0.001)
                                                         if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                             blackDuckNormal()
                                                             return
@@ -648,6 +674,7 @@ def blackDuckNormal():
                                                         "\n2) Back\n\n"
                                                     , 0.01)
                                                     BD_GO = input().strip().lower()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckNormal()
                                                         return
@@ -713,6 +740,7 @@ def blackDuckNormal():
             "\nPress any key to go back\n"
         )
         getch.getch()
+        print_tw("\n=-------------------------=",0.001)
 #----Blackjack Function Normal----
 
 #----Blackjack Function Advanced----
@@ -729,6 +757,7 @@ def blackDuckAdvanced():
         while True:
             print_tw("\nInsert bet amount ($1 MIN): ")
             UP_Bet = input().strip()
+            print_tw("\n=-------------------------=",0.001)
             if UP_Bet.isdigit():
                 if int(UP_Bet) > 0:
                     if int(UP_Bet) <= USER_WALLET:
@@ -739,6 +768,7 @@ def blackDuckAdvanced():
                                 "\n2) Redo\n\n"
                             )
                             UP_Bet_Confirmation = input().strip().lower()
+                            print_tw("\n=-------------------------=",0.001)
                             if UP_Bet_Confirmation in ("1", "confirm"):
                                 USER_WALLET -= int(UP_Bet)
                                 cvl_temp = CVL.copy()
@@ -776,6 +806,7 @@ def blackDuckAdvanced():
                                             "\n5) Card Values | 6) Terminology\n\n"
                                         , 0.01)
                                         UP_BlackDuck = input().strip().lower()
+                                        print_tw("\n=-------------------------=",0.001)
                                     if  UP_BlackDuck in ("1", "hit"):
                                         while True:
                                             if Stand_Override:
@@ -806,6 +837,7 @@ def blackDuckAdvanced():
                                                             "\n2) Back\n\n"
                                                         , 0.01)
                                                         BD_GO = input().strip().lower()
+                                                        print_tw("\n=-------------------------=",0.001)
                                                         if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                             blackDuckAdvanced()
                                                             return
@@ -819,6 +851,7 @@ def blackDuckAdvanced():
                                                     "\n3) Card Values | 4) Terminology\n\n"
                                                 , 0.01)
                                                 UP_BlackDuck = input().strip().lower()
+                                                print_tw("\n=-------------------------=",0.001)
                                                 if UP_BlackDuck in ("1", "hit"):
                                                     break
                                                 elif UP_BlackDuck in ("2", "stand"):
@@ -849,6 +882,7 @@ def blackDuckAdvanced():
                                                 print_tw(f" : {P_Total}")
                                             print_tw("\n\nPress any key to continue\n")
                                             getch.getch()
+                                            print_tw("\n=-------------------------=",0.001)
                                             while True:
                                                 print("")
                                                 if D_Total > 21:
@@ -873,6 +907,7 @@ def blackDuckAdvanced():
                                                         , 0.01)
                                                         GAME_SCORE += 2*int(UP_Bet)
                                                     BD_GO = input().strip().lower()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckAdvanced()
                                                         return
@@ -891,6 +926,7 @@ def blackDuckAdvanced():
                                                             "\n2) Back\n\n"
                                                         , 0.01)
                                                         BD_GO = input().strip().lower()
+                                                        print_tw("\n=-------------------------=",0.001)
                                                         if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                             blackDuckAdvanced()
                                                             return
@@ -908,6 +944,7 @@ def blackDuckAdvanced():
                                                         "\n2) Back\n\n"
                                                     , 0.01)
                                                     BD_GO = input().strip().lower()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckAdvanced()
                                                         return
@@ -972,6 +1009,7 @@ def blackDuckAdvanced():
                                                         "\n2) Back\n\n"
                                                     , 0.01)
                                                     BD_GO = input().strip().lower()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                         blackDuckAdvanced()
                                                         return
@@ -983,6 +1021,7 @@ def blackDuckAdvanced():
                                             Stand_Override = True
                                             print_tw("\nPress any button to continue\n")
                                             getch.getch()
+                                            print_tw("\n=-------------------------=",0.001)
                                         elif USER_WALLET < int(UP_Bet):
                                             print_tw("\nYou don't have enough money to double down\n")
                                             continue
@@ -1050,7 +1089,7 @@ def blackDuckAdvanced():
                                                         "\n4) Card Values | 5) Terminology\n\n"
                                                     , 0.01)
                                                     UP_Hand1 = input().strip().lower()
-                                                    
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if UP_Hand1 in ("1", "hit"):
                                                         key, value = (random.choice(list(cvl_temp.items())))
                                                         PCL1[key] = value
@@ -1129,7 +1168,7 @@ def blackDuckAdvanced():
                                                         "\n4) Card Values | 5) Terminology\n\n"
                                                     , 0.01)
                                                     UP_Hand2 = input().strip().lower()
-                                                    
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     if UP_Hand2 in ("1", "hit"):
                                                         key, value = (random.choice(list(cvl_temp.items())))
                                                         PCL2[key] = value
@@ -1206,6 +1245,7 @@ def blackDuckAdvanced():
                                                         print_tw(f" : {P2_Total}")
                                                     print_tw("\n\nPress any key to continue\n")
                                                     getch.getch()
+                                                    print_tw("\n=-------------------------=",0.001)
                                                     
                                                     if D_Total >= 17:
                                                         break
@@ -1271,6 +1311,7 @@ def blackDuckAdvanced():
                                                 
                                                 print_tw("\n\n1) Play again\n2) Back\n\n")
                                                 BD_GO = input().strip().lower()
+                                                print_tw("\n=-------------------------=",0.001)
                                                 if BD_GO in ("1", "play", "again", "play again", "pa"):
                                                     blackDuckAdvanced()
                                                     return
@@ -1316,6 +1357,7 @@ def blackDuckAdvanced():
             "\nPress any key to go back\n"
         )
         getch.getch()
+        print_tw("\n=-------------------------=",0.001)
 #----Blackjack Function Advanced----
 
 #----Settings Function----
@@ -1337,6 +1379,7 @@ def settings():
             print_tw("\n2) BlackDuck total counter : | True |-False-|")
         print_tw("\n3) Back\n\n")
         Settings_Config = input().strip().lower()
+        print_tw("\n=-------------------------=",0.001)
         if Settings_Config in ("1", "blackduck game", "blackduck game mode", "bgm"):
             if BlackDuck_Mode == 2:
                 BlackDuck_Mode = 0
