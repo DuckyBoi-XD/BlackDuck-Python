@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set tag name variable
         id: set_tag
@@ -56,6 +57,11 @@ jobs:
           echo "=== __init__.py ==="
           grep -n "__version__" blackduck/__init__.py || true
 
+      - name: Switch to main branch
+        run: |
+          git checkout main
+          git pull origin main
+
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -63,3 +69,4 @@ jobs:
           file_pattern: pyproject.toml blackduck/__init__.py
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
+          branch: main
