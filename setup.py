@@ -12,9 +12,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DuckyBoi-XD/BlackJack-Ducky",
-    project_urls={
-        "Repository": "https://github.com/DuckyBoi-XD/BlackJack-Ducky",
-    },
+    license="GPL-3.0-only",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: End Users/Desktop",
@@ -31,7 +29,7 @@ setup(
     packages=find_packages(),
     python_requires=">=3.7",
     install_requires=[
-        "getch>=1.0",
+        "getch",
     ],
     entry_points={
         "console_scripts": [
