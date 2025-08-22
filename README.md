@@ -1,6 +1,8 @@
 # BlackDuck
 
-BlackDuck is a game commonly known as blackjack. I switched all the jacks with ducks (text) and added the most common actions, hitting, standing, doubling down and spliting. The game is made susing Python and main game in inclosed in a menu where you can see information, change settings and regroup youer money.
+BlackDuck is a game commonly known as blackjack. I switched all the jacks with ducks (text) and added the most common actions, hitting, standing, doubling down and spliting. The game is made using Python and main game in inclosed in a menu where you can see information, change settings and regroup youer money. 
+
+You can play this on your terminal/command prompt that has python 3 and pip installed. You can install the game following the '**How to play BlackDuck**'
 
 ## Features
 
