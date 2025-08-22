@@ -9,7 +9,7 @@ This package provides a complete blackjack game implementation with:
 - Both normal and advanced game modes
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.2"
 __author__ = "Braeden Sy Tan"
 __email__ = "braedenjairsytan@icloud.com"
 
