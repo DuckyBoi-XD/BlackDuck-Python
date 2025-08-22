@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "blackduck_game"
-version = "0.2.0"
+name = "blackduck-game"
+version = "0.2.2"
 description = "Blackjack but with ducks. And for some reason, a complex ATM system"
 authors = [
     { name="Braeden Sy Tan", email="braedenjairsytan@icloud.com" }
@@ -12,9 +12,7 @@ authors = [
 readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.8"
-dependencies = [
-    "getch"
-]
+dependencies = []
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",

@@ -1,7 +1,29 @@
 import sys
 import time
 import random
-import getch
+
+#----Wait for Key Function----
+def wait_for_key():
+    try:
+        import tty
+        import termios
+        # Unix/Linux/macOS implementation
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setcbreak(fd)
+            sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    except ImportError:
+        # Windows implementation
+        try:
+            import msvcrt
+            msvcrt.getch()
+        except ImportError:
+            # Fallback for other systems
+            input("Press Enter to continue...")
+#----Wait for Key Function----
 
 #----Typewriter Function----
 def print_tw(sentence, type_delay=0.02):
@@ -277,7 +299,7 @@ def ATM():
                 f"\nYou still have ${USER_WALLET} in your wallet. Also mum said for emergencies only."
                 "\n\nPress any key to go back!\n"
             )
-            getch.getch()
+            wait_for_key()
             print_tw("\n=-------------------------=",0.001)
     except KeyboardInterrupt:
         print_tw(f"\nGame Score: {GAME_SCORE}\n\nQuitting Program\n")
@@ -611,7 +633,7 @@ def blackDuckNormal():
                                             if BlackDuck_Total:
                                                 print_tw(f" : {P_Total}")
                                             print_tw("\n\nPress any key to continue\n")
-                                            getch.getch()
+                                            wait_for_key()
                                             print_tw("\n=-------------------------=",0.001)
                                             while True:
                                                 print("")
@@ -739,7 +761,7 @@ def blackDuckNormal():
             "\nYou don't have enough money to gamble with"
             "\nPress any key to go back\n"
         )
-        getch.getch()
+        wait_for_key()
         print_tw("\n=-------------------------=",0.001)
 #----Blackjack Function Normal----
 
@@ -881,7 +903,7 @@ def blackDuckAdvanced():
                                             if BlackDuck_Total:
                                                 print_tw(f" : {P_Total}")
                                             print_tw("\n\nPress any key to continue\n")
-                                            getch.getch()
+                                            wait_for_key()
                                             print_tw("\n=-------------------------=",0.001)
                                             while True:
                                                 print("")
@@ -1020,7 +1042,7 @@ def blackDuckAdvanced():
                                                         continue
                                             Stand_Override = True
                                             print_tw("\nPress any button to continue\n")
-                                            getch.getch()
+                                            wait_for_key()
                                             print_tw("\n=-------------------------=",0.001)
                                         elif USER_WALLET < int(UP_Bet):
                                             print_tw("\nYou don't have enough money to double down\n")
@@ -1244,7 +1266,7 @@ def blackDuckAdvanced():
                                                     if BlackDuck_Total:
                                                         print_tw(f" : {P2_Total}")
                                                     print_tw("\n\nPress any key to continue\n")
-                                                    getch.getch()
+                                                    wait_for_key()
                                                     print_tw("\n=-------------------------=",0.001)
                                                     
                                                     if D_Total >= 17:
@@ -1356,7 +1378,7 @@ def blackDuckAdvanced():
             "\nYou don't have enough money to gamble with"
             "\nPress any key to go back\n"
         )
-        getch.getch()
+        wait_for_key()
         print_tw("\n=-------------------------=",0.001)
 #----Blackjack Function Advanced----
 
