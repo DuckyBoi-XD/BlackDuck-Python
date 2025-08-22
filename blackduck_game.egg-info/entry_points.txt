@@ -1,2 +1,0 @@
-[console_scripts]
-blackduck = blackduck.game:main
