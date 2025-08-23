@@ -545,6 +545,7 @@ def blackDuckNormal():
                                     else:
                                         D_Total = sum(DCL.values())
                                         P_Total = sum(PCL.values())
+                                        print_tw("\n\n--- Players Hand ---\n",0.01)
                                         print_tw(
                                             f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                         if BlackDuck_Total:
@@ -569,7 +570,7 @@ def blackDuckNormal():
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
                                             while True:
-                                                print_tw("--- Players Hand ---",0.01)
+                                                print_tw("\n\n--- Players Hand ---\n",0.01)
                                                 print_tw(
                                                     f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -719,9 +720,9 @@ def blackDuckNormal():
                                                         DCB[card_name] = card_value
                                                 D_Total = sum(DCL.values()) + sum(DCB.values())
                                                 P_Total = sum(PCL.values())
-                                                print_tw("--- Dealders Hand ---",0.01)
+                                                print_tw("\n--- Dealer's Turn ---\n",0.01)
                                                 print_tw(
-                                                    f"Dealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                    f"\nDealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
                                                     print_tw(f" : {D_Total}")
                                                 print_tw(
@@ -815,6 +816,7 @@ def blackDuckAdvanced():
                                     else:
                                         D_Total = sum(DCL.values())
                                         P_Total = sum(PCL.values())
+                                        print_tw("\n\n--- Players Hand ---\n",0.01)
                                         print_tw(
                                             f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                         if BlackDuck_Total:
@@ -839,7 +841,7 @@ def blackDuckAdvanced():
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
                                             while True:
-                                                print_tw("--- Players Hand ---",0.01)
+                                                print_tw("\n\n--- Players Hand ---\n",0.01)
                                                 print_tw(
                                                     f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
@@ -989,9 +991,9 @@ def blackDuckAdvanced():
                                                         DCB[card_name] = card_value
                                                 D_Total = sum(DCL.values()) + sum(DCB.values())
                                                 P_Total = sum(PCL.values())
-                                                print_tw("--- Dealers Hand ---",0.01)
+                                                print_tw("\n--- Dealer's Turn ---\n",0.01)
                                                 print_tw(
-                                                    f"Dealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
+                                                    f"\nDealers Hand: {list(DCB.keys())[0]} | {' | '.join(list(DCL.keys()))}", 0.01)
                                                 if BlackDuck_Total:
                                                     print_tw(f" : {D_Total}")
                                                 print_tw(
@@ -1011,7 +1013,7 @@ def blackDuckAdvanced():
                                             cvl_temp.pop(key)
                                             P_Total = handle_aces(PCL)  # Handle player Aces automatically
                                             D_Total = sum(DCL.values())
-                                            print_tw("--- Players Hand ---",0.01)
+                                            print_tw("\n\n--- Players Hand ---\n",0.01)
                                             print_tw(
                                                 f"\nDealers Hand: __ | {' | '.join(list(DCL.keys()))}", 0.01)
                                             if BlackDuck_Total:
@@ -1095,7 +1097,7 @@ def blackDuckAdvanced():
                                                 current_bet = original_bet
                                                 hand1_stand = False
                                                 
-                                                print_tw("\n\n--- Playing Hand 1 ---")
+                                                print_tw("\n\n--- Playing Hand 1 ---\n")
                                                 while not hand1_stand:
                                                     P1_Total = handle_aces(PCL1)
                                                     D_Total = sum(DCL.values())
@@ -1171,7 +1173,7 @@ def blackDuckAdvanced():
                                                         continue
                                                 
                                                 # Play Hand 2
-                                                print_tw("\n--- Playing Hand 2 ---")
+                                                print_tw("\n--- Playing Hand 2 ---\n")
                                                 current_bet2 = original_bet
                                                 hand2_stand = False
                                                 
@@ -1250,7 +1252,7 @@ def blackDuckAdvanced():
                                                         continue
                                                 
                                                 # Now play dealer and resolve both hands
-                                                print_tw("\n\n--- Dealer's Turn ---")
+                                                print_tw("\n\n--- Dealer's Turn ---\n")
                                                 while True:
                                                     D_Total = sum(DCL.values()) + sum(DCB.values())
                                                     P1_Total = handle_aces(PCL1)
@@ -1289,7 +1291,7 @@ def blackDuckAdvanced():
                                                 total_winnings = 0
                                                 
                                                 # Hand 1 results
-                                                print_tw("\n--- HAND 1 RESULTS ---")
+                                                print_tw("\n--- HAND 1 RESULTS ---\n")
                                                 if P1_Total > 21:
                                                     print_tw(f"\nHand 1 BUSTED! Lost ${current_bet}")
                                                 elif D_Total > 21:
@@ -1309,7 +1311,7 @@ def blackDuckAdvanced():
                                                     print_tw(f"\nHand 1 LOST! Lost ${current_bet}")
                                                 
                                                 # Hand 2 results
-                                                print_tw("\n\n--- HAND 2 RESULTS ---")
+                                                print_tw("\n\n--- HAND 2 RESULTS ---\n")
                                                 if P2_Total > 21:
                                                     print_tw(f"\nHand 2 BUSTED! Lost ${current_bet2}")
                                                 elif D_Total > 21:
