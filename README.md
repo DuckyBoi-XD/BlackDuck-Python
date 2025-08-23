@@ -65,3 +65,8 @@ You can play this on your terminal/command prompt that has python 3 and pip inst
 5) Use the command `blackduck` to play the game
 
 6) Start playing and have fun gambling
+
+## Credit
+[@QinCai](https://hackclub.slack.com/team/U07BNRCEARM): For helping with the typing function and part of the PyPi packaging process
+
+AI: For creating the split function, helping me understand how some parts of code works, creating code for the PyPi package and creating the replacement for getch.
